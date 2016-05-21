@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MajorWork.UI", "MajorWork\MajorWork.UI.csproj", "{34D8F4B3-E1EB-44A7-968C-86D89498092A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MajorWork.Logic", "MajorWork.Logic\MajorWork.Logic.csproj", "{4AD8BB31-6B26-4772-AE85-47B40DCF87F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MajorWork.Logic.Tests", "MajorWork.Logic.Tests\MajorWork.Logic.Tests.csproj", "{A0F7EFB0-65DF-46FF-91F6-BEEB82AC3C5C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34D8F4B3-E1EB-44A7-968C-86D89498092A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34D8F4B3-E1EB-44A7-968C-86D89498092A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34D8F4B3-E1EB-44A7-968C-86D89498092A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34D8F4B3-E1EB-44A7-968C-86D89498092A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AD8BB31-6B26-4772-AE85-47B40DCF87F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AD8BB31-6B26-4772-AE85-47B40DCF87F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AD8BB31-6B26-4772-AE85-47B40DCF87F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AD8BB31-6B26-4772-AE85-47B40DCF87F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0F7EFB0-65DF-46FF-91F6-BEEB82AC3C5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0F7EFB0-65DF-46FF-91F6-BEEB82AC3C5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0F7EFB0-65DF-46FF-91F6-BEEB82AC3C5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0F7EFB0-65DF-46FF-91F6-BEEB82AC3C5C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
