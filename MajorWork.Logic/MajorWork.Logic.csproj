@@ -47,7 +47,6 @@
     <Compile Include="Models\playermoves.cs" />
     <Compile Include="Models\stack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\Class1.cs" />
     <Compile Include="Services\MazeGenerationService.cs" />
     <Compile Include="Services\MazePlayService.cs" />
   </ItemGroup>

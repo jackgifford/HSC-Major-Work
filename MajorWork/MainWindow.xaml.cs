@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using MajorWork.Logic.Services;
+
 namespace MajorWork
 {
     /// <summary>
@@ -40,6 +42,12 @@ namespace MajorWork
                 };
                 RootGrid.Children.Add(Message);
             }
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            MazeGenerationService maze = new MazeGenerationService(10, 10);
+
         }
     }
 }

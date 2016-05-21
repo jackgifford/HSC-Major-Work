@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections;
 
 using MajorWork.Logic.Models;
+using System.Diagnostics;
 
 namespace MajorWork.Logic.Services
 {
@@ -15,21 +16,25 @@ namespace MajorWork.Logic.Services
 
     public class MazeGenerationService
     {
-        public maze mazeGrid = new maze();
+        public maze mazeGrid;
 
         public MazeGenerationService(int userLength, int userWidth)
         {
+            mazeGrid = new maze();
             mazeGrid.width = userWidth;
             mazeGrid.length = userLength;
 
             mazeGrid.mazeStack.Add(new stack
             {
-                X = 0,
-                Y = 0
+                X = 1,
+                Y = 1
             });
 
             GenerateEmptyGrid();
-            GenerateMaze(0,0);
+            GenerateMaze(1,1);
+            debug();
+
+            //Print out whole thing
 
         }
 
@@ -91,7 +96,7 @@ namespace MajorWork.Logic.Services
                             break;
 
                         case 2:
-                            if (y + 2 >= mazeGrid.length - 1)
+                            if (x + 2 >= mazeGrid.length - 1)
                                 continue;
 
                             if (!mazeGrid.mazeGrid.Where(a => (a.X == (x + 2) && a.Y == y)).First().isWall)
@@ -173,5 +178,12 @@ namespace MajorWork.Logic.Services
             return randoms;
         }
 
+        private void debug()
+        {
+            mazeGrid.mazeGrid.ForEach(delegate (mazepoints s)
+            {
+                Debug.WriteLine(s);
+            });
+        }
     }
 }

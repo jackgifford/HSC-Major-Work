@@ -12,14 +12,14 @@ namespace MajorWork.Logic.Models
     {
         private int _width;
         private int _length;
-        private List<stack> _mazeStack;
-        private List<mazepoints> _mazePoints;
+        private List<stack> _mazeStack = new List<stack>();
+        private List<mazepoints> _mazePoints = new List<mazepoints>();
 
 
         //TODO: Add validation to width, and length to ensure they are within range
-        public int width { get { return _width; } set { _width = width; } }
-        public int length { get { return _length; } set { _length = length; } } 
+        public int width { get; set; }
+        public int length { get; set; } 
         public List<stack> mazeStack { get { return _mazeStack; } set { _mazeStack = mazeStack; } }
-        public List<mazepoints> mazeGrid { get; set; }
+        public List<mazepoints> mazeGrid { get { return _mazePoints; } set { _mazePoints = mazeGrid; } }
     }
 }
