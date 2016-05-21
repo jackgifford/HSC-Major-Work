@@ -21,7 +21,15 @@ namespace MajorWork.Logic.Services
         {
             mazeGrid.width = userWidth;
             mazeGrid.length = userLength;
+
+            mazeGrid.mazeStack.Add(new stack
+            {
+                X = 0,
+                Y = 0
+            });
+
             GenerateEmptyGrid();
+            GenerateMaze(0,0);
 
         }
 
@@ -39,9 +47,108 @@ namespace MajorWork.Logic.Services
             }
         }
 
-        private void GenerateMaze()
+        private void GenerateMaze(int x, int y)
         {
-            throw new NotImplementedException();
+            while (mazeGrid.mazeStack.Count != 0)
+            {
+                int[] randDirections = RandomDirections();
+                for (int i = 0; i < randDirections.Length; i++)
+                {
+                    switch (randDirections[i])
+                    {
+                        case 0:
+                            if (x-2 <= 0)
+                                continue;
+
+                            if (!mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == y)).First().isWall)
+                            {
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x - 2) && a.Y == y)).First().isWall = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x - 1) && a.Y == y)).First().isWall = true;
+
+                                addValueToStack(x, y);
+
+                                x = x - 2;
+
+                                GenerateMaze(x, y);
+                            }
+                            break;
+
+                        case 1:
+                            if(y + 2 > mazeGrid.length -1)
+                                continue;
+
+                            if (!mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == y)).First().isWall)
+                            { 
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y + 2))).First().isWall = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y + 2))).First().isWall = true;
+
+                                addValueToStack(x, y);
+
+                                y = y + 2;
+
+                                GenerateMaze(x, y);
+                            }
+                            break;
+
+                        case 2:
+                            if (y + 2 >= mazeGrid.length - 1)
+                                continue;
+
+                            if (!mazeGrid.mazeGrid.Where(a => (a.X == (x + 2) && a.Y == y)).First().isWall)
+                            {
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x + 2) && a.Y == (y))).First().isWall = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x + 1) && a.Y == (y))).First().isWall = true;
+
+                                addValueToStack(x, y);
+
+                                x = x + 2;
+
+                                GenerateMaze(x, y);
+                            }
+                            break;
+
+                        case 3:
+                            if (y - 2 <= 0)
+                                continue;
+
+                            if (!mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == (y - 2))).First().isWall)
+                            {
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y - 1))).First().isWall = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y - 2))).First().isWall = true;
+
+                                addValueToStack(x, y);
+
+                                y = y - 2;
+
+                                GenerateMaze(x, y);
+                            }
+                            break;
+                    }
+                }
+
+                if (mazeGrid.mazeStack.Count != 0)
+                {
+                    //Pop the most recent node from the stack
+
+                    var stackLength = mazeGrid.mazeStack.Count() - 1;
+
+                    x = mazeGrid.mazeStack[stackLength].X;
+                    y = mazeGrid.mazeStack[stackLength].Y;
+                    mazeGrid.mazeStack.RemoveAt(stackLength);
+
+                    GenerateMaze(x, y);
+
+                }
+            }
+        }
+
+        public void addValueToStack(int x, int y)
+        {
+            mazeGrid.mazeStack.Add(new stack
+            {
+                X = x,
+                Y = y
+            });
         }
 
         public int[] RandomDirections()

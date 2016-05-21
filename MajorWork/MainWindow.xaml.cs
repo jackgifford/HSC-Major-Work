@@ -30,6 +30,8 @@ namespace MajorWork
 
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
+
+            //TODO Integrate into MazePlayService
             if (e.Key == Key.Up)
             {
                 Label Message = new Label
