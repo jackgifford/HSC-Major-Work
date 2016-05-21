@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Helpers\ObservableObject.cs" />
+    <Compile Include="Models\astar.cs" />
     <Compile Include="Models\maze.cs" />
     <Compile Include="Models\mazepoints.cs" />
     <Compile Include="Models\playermoves.cs" />
@@ -49,10 +50,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\MazeGenerationService.cs" />
     <Compile Include="Services\MazePlayService.cs" />
+    <Compile Include="Services\MazeSolveService.cs" />
+    <Compile Include="ViewModels\MainWIndowViewModel.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

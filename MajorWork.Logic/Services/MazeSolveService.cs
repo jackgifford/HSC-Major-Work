@@ -6,19 +6,9 @@ using System.Threading.Tasks;
 
 namespace MajorWork.Logic.Services
 {
-    class MazePlayService
+    class MazeSolveService
     {
-        public MazePlayService()
-        {
-
-        }
-
-        private void MoveValidation()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void SolvedValidation()
+        private void GenerateSolution()
         {
             throw new NotImplementedException();
         }

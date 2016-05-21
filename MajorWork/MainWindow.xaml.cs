@@ -40,7 +40,7 @@ namespace MajorWork
                 {
                     Content = "Fired!"
                 };
-                RootGrid.Children.Add(Message);
+                 
             }
         }
 
