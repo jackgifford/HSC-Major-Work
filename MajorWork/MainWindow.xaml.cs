@@ -40,14 +40,9 @@ namespace MajorWork
                 {
                     Content = "Fired!"
                 };
-                RootGrid.Children.Add(Message);
             }
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            MazeGenerationService maze = new MazeGenerationService(10, 10);
 
-        }
     }
 }
