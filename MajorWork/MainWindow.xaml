@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MajorWork"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
+        Title="HSC Major Work" Height="350" Width="525"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    Background="{DynamicResource MaterialDesignPaper}"
+    FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+        >
+    <Grid x:Name="RootGrid">
+        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="169,131,0,0" VerticalAlignment="Top" Width="75"/>
+
     </Grid>
 </Window>

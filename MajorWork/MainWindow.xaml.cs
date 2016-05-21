@@ -22,7 +22,22 @@ namespace MajorWork
     {
         public MainWindow()
         {
+
             InitializeComponent();
+
+            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+        }
+
+        void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Up)
+            {
+                Label Message = new Label
+                {
+                    Content = "Fired!"
+                };
+                RootGrid.Children.Add(Message);
+            }
         }
     }
 }
