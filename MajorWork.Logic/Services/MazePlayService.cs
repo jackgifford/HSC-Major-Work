@@ -8,19 +8,5 @@ namespace MajorWork.Logic.Services
 {
     class MazePlayService
     {
-        public MazePlayService()
-        {
-
-        }
-
-        private void MoveValidation()
-        {
-            throw new NotImplementedException();
-        }
-
-        private void SolvedValidation()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
