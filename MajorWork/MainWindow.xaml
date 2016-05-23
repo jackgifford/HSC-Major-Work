@@ -13,7 +13,7 @@
                 </MenuItem>
                 <MenuItem Header="_Help"/>
             </Menu>
-            <Grid Margin="0,0,0,-18" HorizontalAlignment="Stretch">
+            <Grid Margin="0,0,0,-18" HorizontalAlignment="Stretch" Name="MazeGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -207,7 +207,7 @@
 
                     </StackPanel>
                     <WrapPanel HorizontalAlignment="Center" >
-                        <Button Content="Generate" Margin="0,0,5,0"/>
+                        <Button x:Name="btnGenerate" Content="Generate" Margin="0,0,5,0" Click="btnGenerate_Click"/>
 
                         <Button Content="Solve" Margin="5,0,0,0"  />
                     </WrapPanel>

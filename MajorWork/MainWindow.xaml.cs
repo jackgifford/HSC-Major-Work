@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using MajorWork.Logic.Services;
+using MajorWork.ViewModels;
 
 namespace MajorWork
 {
@@ -41,6 +42,12 @@ namespace MajorWork
                     Content = "Fired!"
                 };
             }
+        }
+
+        private void btnGenerate_Click(object sender, RoutedEventArgs e)
+        {
+            MazeGenerationService maze = new MazeGenerationService(10, 10); //Switch to custom width
+            Draw mazeGraphic = new Draw(maze);
         }
 
 
