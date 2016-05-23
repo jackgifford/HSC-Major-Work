@@ -31,6 +31,8 @@ namespace MajorWork
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
         }
 
+        internal Grid myGrid { get; set; }
+
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
 
@@ -48,6 +50,8 @@ namespace MajorWork
         {
             MazeGenerationService maze = new MazeGenerationService(10, 10); //Switch to custom width
             Draw mazeGraphic = new Draw(maze);
+           
+            
         }
 
 

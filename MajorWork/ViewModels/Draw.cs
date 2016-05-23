@@ -11,9 +11,11 @@ namespace MajorWork.ViewModels
 {
     class Draw
     {
+        MainWindow drawWindow; 
         public Draw(MazeGenerationService mazeGrid)
         {
             DrawMaze(mazeGrid);
+            drawWindow = new MainWindow();
         }
 
         private void DrawMaze(MazeGenerationService mazeGrid)
@@ -21,7 +23,11 @@ namespace MajorWork.ViewModels
             mazeGrid.mazeGrid.mazeGrid.ForEach(delegate(mazepoints s)
             {
                 if (s.isWall == true)
-                    DrawPixel(s);
+                {
+                    Line myLine = new Line();
+                    myLine = DrawPixel(s);
+                    drawWindow.MazeGridUI.Children.Add(myLine);
+                }      
                 // Return data to the view
             });
         }
