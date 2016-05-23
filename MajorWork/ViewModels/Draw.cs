@@ -6,27 +6,30 @@ using System.Threading.Tasks;
 using System.Windows.Shapes;
 using MajorWork.Logic.Models;
 using MajorWork.Logic.Services;
+using System.Windows.Media;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace MajorWork.ViewModels
 {
     class Draw
     {
         MainWindow drawWindow; 
-        public Draw(MazeGenerationService mazeGrid)
+        public Draw(MazeGenerationService mazeGrid, Canvas canvas)
         {
-            DrawMaze(mazeGrid);
+            DrawMaze(mazeGrid, canvas);
             drawWindow = new MainWindow();
         }
 
-        private void DrawMaze(MazeGenerationService mazeGrid)
+        private void DrawMaze(MazeGenerationService mazeGrid, Canvas canvas)
         {
             mazeGrid.mazeGrid.mazeGrid.ForEach(delegate(mazepoints s)
             {
                 if (s.isWall == true)
                 {
-                    Line myLine = new Line();
+                    Line myLine;
                     myLine = DrawPixel(s);
-                    drawWindow.MazeGridUI.Children.Add(myLine);
+                    canvas.Children.Add(myLine);
                 }      
                 // Return data to the view
             });
@@ -45,6 +48,9 @@ namespace MajorWork.ViewModels
             //myLine.HorizontalAlignment = HorizontalAlignment.Left;
             //myLine.VerticalAlignment = VerticalAlignment.Center;
             myLine.StrokeThickness = 2;
+            myLine.SnapsToDevicePixels = true;
+            myLine.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Aliased);
+            myLine.Visibility = System.Windows.Visibility.Visible;
 
             return myLine;
 

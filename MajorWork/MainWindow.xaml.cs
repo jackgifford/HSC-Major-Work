@@ -49,7 +49,7 @@ namespace MajorWork
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
             MazeGenerationService maze = new MazeGenerationService(10, 10); //Switch to custom width
-            Draw mazeGraphic = new Draw(maze);
+            Draw mazeGraphic = new Draw(maze, MazeGridUI);
            
             
         }

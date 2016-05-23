@@ -18,9 +18,10 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" Margin="40" x:FieldModifier="public" x:Name="MazeGridUI">
-             
-       
+                <Grid Grid.Column="0" Margin="40" x:FieldModifier="public" x:Name="blank">
+                    <Canvas HorizontalAlignment="Left" Height="290" Margin="10,0,0,0" Visibility="Visible" VerticalAlignment="Top" Width="260" x:FieldModifier="public" x:Name="MazeGridUI"/>
+
+
                 </Grid>
 
 
