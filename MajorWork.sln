@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MajorWork.UI", "MajorWork\MajorWork.UI.csproj", "{34D8F4B3-E1EB-44A7-968C-86D89498092A}"
 EndProject
@@ -26,7 +26,6 @@ Global
 		{A0F7EFB0-65DF-46FF-91F6-BEEB82AC3C5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A0F7EFB0-65DF-46FF-91F6-BEEB82AC3C5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0F7EFB0-65DF-46FF-91F6-BEEB82AC3C5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A0F7EFB0-65DF-46FF-91F6-BEEB82AC3C5C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

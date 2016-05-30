@@ -14,6 +14,8 @@ namespace MajorWork.ViewModels
 {
     class Draw
     {
+        private Canvas drawCanvas;
+
         MainWindow drawWindow; 
         public Draw(MazeGenerationService mazeGrid, Canvas canvas)
         {
