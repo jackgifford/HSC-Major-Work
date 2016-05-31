@@ -8,14 +8,17 @@ using MajorWork.Logic.Models;
 
 namespace MajorWork.Logic.Services
 {
-    class MazePlayService
+    public class MazePlayService
     {
-        public MazePlayService()
+        private maze mazeGrid;
+
+        public MazePlayService(maze userMazeGrid)
         {
+            mazeGrid = userMazeGrid;
             playermoves Fields = new playermoves();
         }
 
-        private void MoveSelection()
+        public void MoveSelection()
         {
             throw new NotImplementedException();
         }

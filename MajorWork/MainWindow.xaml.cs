@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using MajorWork.Logic.Models;
 using MajorWork.Logic.Services;
 using MajorWork.ViewModels;
 
@@ -32,7 +33,7 @@ namespace MajorWork
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
         }
 
-        internal Grid myGrid { get; set; }
+        MazePlayService play;
 
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
@@ -40,18 +41,46 @@ namespace MajorWork
             //TODO Integrate into MazePlayService
             if (e.Key == Key.Up)
             {
-                Label Message = new Label
-                {
-                    Content = "Fired!"
-                };
+                throw new NotImplementedException();
+            }
+
+            if (e.Key == Key.Down)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (e.Key == Key.Left)
+            {
+                throw new NotImplementedException();
+            }
+
+            if (e.Key == Key.Right)
+            {
+                throw new NotImplementedException();
             }
         }
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
-            MazeGenerationService maze = new MazeGenerationService(10, 10); //Switch to custom width
-            //blank.Background = Color.FromRgb(33, 150, 243);
-            Draw mazeGraphic = new Draw(maze, blank);  
+            //TODO MAJOR REFACTORING
+            maze ReferenceMaze = new maze();
+           
+
+            try
+            {
+                MazeGenerationService mazeGenService = new MazeGenerationService(ref ReferenceMaze, Convert.ToInt32(lengthTxt.Text), Convert.ToInt32(widthTxt.Text));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("A handled exception just occurred: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            
+
+            var converter = new System.Windows.Media.BrushConverter();
+            var brush = (Brush)converter.ConvertFromString("#2196F3");
+            blank.Background = brush;
+            //Draw mazeGraphic = new Draw(mazeGenService, blank);
+            //play = new MazePlayService(mazeGenService);
         }
 
         private void generateGrid()
