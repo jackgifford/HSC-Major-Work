@@ -27,6 +27,7 @@ namespace MajorWork
         {
 
             InitializeComponent();
+            generateGrid();
 
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
         }
@@ -49,7 +50,26 @@ namespace MajorWork
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
             MazeGenerationService maze = new MazeGenerationService(10, 10); //Switch to custom width
-            Draw mazeGraphic = new Draw(maze, MazeGridUI);  
+            //blank.Background = Color.FromRgb(33, 150, 243);
+            Draw mazeGraphic = new Draw(maze, blank);  
+        }
+
+        private void generateGrid()
+        {
+            //Enable for debugging
+            blank.ShowGridLines = true;
+
+            //Column Definitions
+            for (int i = 0; i < 10; i++) //Change to user width
+            {
+                blank.ColumnDefinitions.Add(new ColumnDefinition());
+            }
+
+            //Row Definitons
+            for (int i = 0; i < 10; i++)
+            {
+                blank.RowDefinitions.Add(new RowDefinition());
+            }
         }
     }
 }
