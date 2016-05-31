@@ -6,40 +6,52 @@ using System.Threading.Tasks;
 using System.Windows.Shapes;
 using MajorWork.Logic.Models;
 using MajorWork.Logic.Services;
+using System.Windows.Media;
+using System.Windows.Controls;
+using System.Windows;
+using System.Drawing;
+
 
 namespace MajorWork.ViewModels
 {
     class Draw
     {
-        public Draw(maze mazeGrid)
+        MainWindow drawWindow;
+        public Draw(MazeGenerationService mazeGrid, Grid blank)
         {
-            DrawMaze(mazeGrid);
+            DrawMaze(mazeGrid, blank);
+            drawWindow = new MainWindow();
         }
 
-        private void DrawMaze(maze mazeGrid)
+        private void DrawMaze(MazeGenerationService mazeGrid, Grid grid)
         {
-            mazeGrid.mazeGrid.ForEach(delegate(mazepoints s)
+            mazeGrid.mazeGrid.mazeGrid.ForEach(delegate(mazepoints s)
             {
-                DrawPixel(s);
+                if (s.isWall == true)
+                {
+                    Rectangle myRect = new Rectangle();
+                    myRect = DrawRect(s, myRect);
+                    grid.Children.Add(myRect);
+                    Grid.SetRow(myRect, s.Y);
+                    Grid.SetColumn(myRect, s.X);
+                }
+                // Return data to the view
             });
         }
 
-        private Line DrawPixel(mazepoints s)
+        private void readyPlayer(MazeGenerationService mazeGrid, Grid grid)
         {
-            Line myLine = new Line();
-            //Get colour from UI
-            myLine.Stroke = System.Windows.Media.Brushes.Lavender;
-            myLine.X1 = s.X; //Grid starting position
-            myLine.X2 = s.X + 1; //Grid final position
+            throw new NotImplementedException();
+        }
 
-            myLine.Y1 = s.Y; //Grid starting position
-            myLine.Y2 = s.Y + 1; //Grid final position
-            //myLine.HorizontalAlignment = HorizontalAlignment.Left;
-            //myLine.VerticalAlignment = VerticalAlignment.Center;
-            myLine.StrokeThickness = 2;
-
-            return myLine;
-
+        private Rectangle DrawRect(mazepoints s, Rectangle rect)
+        {
+            rect.Width = 50;
+            rect.Height = 50;
+            SolidColorBrush colourBrush = new SolidColorBrush(Color.FromRgb(255,255,255));
+            
+            rect.Fill = colourBrush;
+            return rect;
         }
     }
 }

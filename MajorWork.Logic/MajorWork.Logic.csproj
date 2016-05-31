@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Helpers\MathRandom.cs" />
     <Compile Include="Helpers\ObservableObject.cs" />
     <Compile Include="Models\maze.cs" />
     <Compile Include="Models\mazepoints.cs" />

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections;
 
 using MajorWork.Logic.Models;
+using MajorWork.Logic.Helpers;
 using System.Diagnostics;
 
 namespace MajorWork.Logic.Services
@@ -26,12 +27,14 @@ namespace MajorWork.Logic.Services
 
             mazeGrid.mazeStack.Add(new stack
             {
-                X = 1,
-                Y = 1
+                X = 0,
+                Y = 0
             });
 
             GenerateEmptyGrid();
-            GenerateMaze(1,1);
+            GenerateMaze(0,0);
+            mazeGrid.mazeGrid.Where(a => (a.X == (0) && a.Y == 0)).First().isWall = true;
+
             debug();
 
             //Print out whole thing
@@ -65,7 +68,7 @@ namespace MajorWork.Logic.Services
                             if (x-2 <= 0)
                                 continue;
 
-                            if (!mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == y)).First().isWall)
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == (x-2) && a.Y == y)).First().isWall == false)
                             {
                                 mazeGrid.mazeGrid.Where(a => (a.X == (x - 2) && a.Y == y)).First().isWall = true;
                                 mazeGrid.mazeGrid.Where(a => (a.X == (x - 1) && a.Y == y)).First().isWall = true;
@@ -82,10 +85,10 @@ namespace MajorWork.Logic.Services
                             if(y + 2 > mazeGrid.length -1)
                                 continue;
 
-                            if (!mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == y)).First().isWall)
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == (y+2))).First().isWall == false)
                             { 
                                 mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y + 2))).First().isWall = true;
-                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y + 2))).First().isWall = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y + 1))).First().isWall = true;
 
                                 addValueToStack(x, y);
 
@@ -99,7 +102,7 @@ namespace MajorWork.Logic.Services
                             if (x + 2 >= mazeGrid.length - 1)
                                 continue;
 
-                            if (!mazeGrid.mazeGrid.Where(a => (a.X == (x + 2) && a.Y == y)).First().isWall)
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == (x+2) && a.Y == y)).First().isWall == false)
                             {
                                 mazeGrid.mazeGrid.Where(a => (a.X == (x + 2) && a.Y == (y))).First().isWall = true;
                                 mazeGrid.mazeGrid.Where(a => (a.X == (x + 1) && a.Y == (y))).First().isWall = true;
@@ -116,7 +119,7 @@ namespace MajorWork.Logic.Services
                             if (y - 2 <= 0)
                                 continue;
 
-                            if (!mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == (y - 2))).First().isWall)
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == (y-2))).First().isWall == false)
                             {
                                 mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y - 1))).First().isWall = true;
                                 mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y - 2))).First().isWall = true;
@@ -165,11 +168,11 @@ namespace MajorWork.Logic.Services
                 randoms[i] = i;
             }
 
-            Random rnd = new Random();
+            
 
             for (int i = randoms.Length; i > 1; i--)
             {
-                int a = rnd.Next(i);
+                int a = MathRandom.GetRandomNumber(0, i);
                 int tmp = randoms[a];
                 randoms[a] = randoms[i - 1];
                 randoms[i - 1] = tmp;
