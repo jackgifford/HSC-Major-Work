@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using MajorWork.Logic.Services;
+using MajorWork.Logic.Models;
 using MajorWork.ViewModels;
 
 namespace MajorWork
@@ -25,7 +26,6 @@ namespace MajorWork
     {
         public MainWindow()
         {
-
             InitializeComponent();
             generateGrid();
 
@@ -49,15 +49,16 @@ namespace MajorWork
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
-            MazeGenerationService maze = new MazeGenerationService(10, 10); //Switch to custom width
-            //blank.Background = Color.FromRgb(33, 150, 243);
+            maze maze = new maze();
+            MazeGenerationService GenMaze = new MazeGenerationService(10, 10, ref maze); //Switch to custom width
+            blank.Visibility = Visibility.Visible;
             Draw mazeGraphic = new Draw(maze, blank);  
         }
 
         private void generateGrid()
         {
             //Enable for debugging
-            blank.ShowGridLines = true;
+            blank.ShowGridLines = false;
 
             //Column Definitions
             for (int i = 0; i < 10; i++) //Change to user width

@@ -18,7 +18,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" Margin="40" Width="Auto" Height="Auto" x:FieldModifier="public" x:Name="blank" Background="#2196F3">
+                <Grid Grid.Column="0" Margin="40" Width="Auto" Height="Auto" x:FieldModifier="public" x:Name="blank" Visibility="Hidden" Background="#2196F3">
 
 
                 </Grid>

@@ -16,16 +16,16 @@ namespace MajorWork.ViewModels
 {
     class Draw
     {
-        MainWindow drawWindow;
-        public Draw(MazeGenerationService mazeGrid, Grid blank)
+        private maze maze;
+        public Draw(maze mazeGrid, Grid blank)
         {
-            DrawMaze(mazeGrid, blank);
-            drawWindow = new MainWindow();
+            maze = mazeGrid;
+            DrawMaze(blank);   
         }
 
-        private void DrawMaze(MazeGenerationService mazeGrid, Grid grid)
+        private void DrawMaze(Grid grid)
         {
-            mazeGrid.mazeGrid.mazeGrid.ForEach(delegate(mazepoints s)
+            maze.mazeGrid.ForEach(delegate(mazepoints s)
             {
                 if (s.isWall == true)
                 {
