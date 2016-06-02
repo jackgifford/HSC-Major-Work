@@ -18,7 +18,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" Margin="40" Width="Auto" Height="Auto" x:FieldModifier="public" x:Name="blank" >
+                <Grid Grid.Column="0" Margin="40" Width="Auto" Height="Auto" x:FieldModifier="public" x:Name="blank" Background="#2196F3">
 
 
                 </Grid>
@@ -29,9 +29,9 @@
                     <Label Content="Grid Dimensions" FontWeight="Bold" FontSize="14" />
                     <WrapPanel Margin="0,0,0,20">
                         <Label Content="Length:"/>
-                        <TextBox x:Name="lengthTxt" Width="40"></TextBox>
+                        <TextBox Width="40"></TextBox>
                         <Label Content="Width:" />
-                        <TextBox x:Name="widthTxt" Width="40"></TextBox>
+                        <TextBox Width="40"></TextBox>
                     </WrapPanel>
                     <Label Content="Generation Speed" FontWeight="Bold" FontSize="14" />
                     <WrapPanel Margin="0,0,0,20">
