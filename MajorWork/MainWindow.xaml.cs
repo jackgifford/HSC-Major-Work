@@ -13,8 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using MajorWork.Logic.Services;
-using MajorWork.Logic.Models;
 using MajorWork.ViewModels;
 
 namespace MajorWork
@@ -24,15 +22,20 @@ namespace MajorWork
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainWindowViewModel _mainWindow;
+        public Grid gridBlank;
+
         public MainWindow()
         {
+            MainWindowViewModel MainWindow = new MainWindowViewModel();
             InitializeComponent();
             generateGrid();
+            gridBlank = blank;
+
+            _mainWindow = MainWindow;
 
             this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
         }
-
-        internal Grid myGrid { get; set; }
 
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
@@ -49,10 +52,23 @@ namespace MajorWork
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
-            maze maze = new maze();
-            MazeGenerationService GenMaze = new MazeGenerationService(10, 10, ref maze); //Switch to custom width
-            blank.Visibility = Visibility.Visible;
-            Draw mazeGraphic = new Draw(maze, blank);  
+            if ((string)btnGenerate.Content == "Generate")
+            {
+                _mainWindow.Generate(blank);
+                blank.Visibility = Visibility.Visible;
+                btnGenerate.Content = "Clear";
+                return;
+
+            }
+
+            if ((string)btnGenerate.Content == "Clear")
+            {
+                _mainWindow.Clear();
+                blank.Children.Clear();
+                blank.Visibility = Visibility.Hidden;
+                btnGenerate.Content = "Generate";
+                return;
+            }
         }
 
         private void generateGrid()

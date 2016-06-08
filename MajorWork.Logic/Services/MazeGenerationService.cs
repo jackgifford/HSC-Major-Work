@@ -18,7 +18,7 @@ namespace MajorWork.Logic.Services
     {
         private maze mazeGrid;
 
-        public MazeGenerationService(int userLength, int userWidth, ref maze mazeGridUser)
+        public MazeGenerationService(int userLength, int userWidth, maze mazeGridUser)
         {
             mazeGrid = mazeGridUser;
             

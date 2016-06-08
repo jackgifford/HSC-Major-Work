@@ -17,31 +17,40 @@ namespace MajorWork.ViewModels
     class Draw
     {
         private maze maze;
+        private Grid grid;
+
         public Draw(maze mazeGrid, Grid blank)
         {
             maze = mazeGrid;
-            DrawMaze(blank);   
+            grid = blank;
+            DrawMaze();
+            readyPlayer();
         }
 
-        private void DrawMaze(Grid grid)
+        private void DrawMaze()
         {
             maze.mazeGrid.ForEach(delegate(mazepoints s)
             {
                 if (s.isWall == true)
                 {
-                    Rectangle myRect = new Rectangle();
-                    myRect = DrawRect(s, myRect);
-                    grid.Children.Add(myRect);
-                    Grid.SetRow(myRect, s.Y);
-                    Grid.SetColumn(myRect, s.X);
-                }
-                // Return data to the view
+                    GenerateRectangle(s);
+                } 
             });
         }
 
-        private void readyPlayer(MazeGenerationService mazeGrid, Grid grid)
+        private void readyPlayer()
         {
-            throw new NotImplementedException();
+            mazepoints startCoord = new mazepoints(0, 0, false);
+            GenerateRectangle(startCoord);
+        }
+
+        private void GenerateRectangle(mazepoints s)
+        {
+            Rectangle myRect = new Rectangle();
+            myRect = DrawRect(s, myRect);
+            grid.Children.Add(myRect);
+            Grid.SetRow(myRect, s.Y);
+            Grid.SetColumn(myRect, s.X);
         }
 
         private Rectangle DrawRect(mazepoints s, Rectangle rect)
