@@ -40,7 +40,7 @@ namespace MajorWork
         void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             e.Handled = true;
-
+            _mainWindow.Play(blank, e);
         }
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
@@ -80,6 +80,13 @@ namespace MajorWork
             {
                 blank.RowDefinitions.Add(new RowDefinition());
             }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("Open your web browser?", "Yes and yes", MessageBoxButton.YesNo);
+            
+            System.Diagnostics.Process.Start("http://google.com");
         }
     }
 }

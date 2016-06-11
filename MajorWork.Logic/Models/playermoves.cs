@@ -12,12 +12,14 @@ namespace MajorWork.Logic.Models
 
         public moveList playerFields { get { return _playerFields; } set { _playerFields = playerFields; } }
 
-        public enum moveList
-        {
-            Up,
-            Left,
-            Down,
-            Right
-        };
+        
     }
+
+    public enum moveList
+    {
+        Up,
+        Left,
+        Down,
+        Right
+    };
 }

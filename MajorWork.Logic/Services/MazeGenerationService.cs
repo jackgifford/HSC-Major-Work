@@ -33,7 +33,7 @@ namespace MajorWork.Logic.Services
 
             GenerateEmptyGrid();
             GenerateMaze(0,0);
-            mazeGrid.mazeGrid.Where(a => (a.X == (0) && a.Y == 0)).First().isWall = true;
+            mazeGrid.mazeGrid.Where(a => (a.X == (0) && a.Y == 0)).First().isPath = true;
         }
 
         private void GenerateEmptyGrid()
@@ -60,10 +60,10 @@ namespace MajorWork.Logic.Services
                             if (x-2 <= 0)
                                 continue;
 
-                            if (mazeGrid.mazeGrid.Where(a => (a.X == (x-2) && a.Y == y)).First().isWall == false)
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == (x-2) && a.Y == y)).First().isPath == false)
                             {
-                                mazeGrid.mazeGrid.Where(a => (a.X == (x - 2) && a.Y == y)).First().isWall = true;
-                                mazeGrid.mazeGrid.Where(a => (a.X == (x - 1) && a.Y == y)).First().isWall = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x - 2) && a.Y == y)).First().isPath = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x - 1) && a.Y == y)).First().isPath = true;
 
                                 addValueToStack(x, y);
 
@@ -77,10 +77,10 @@ namespace MajorWork.Logic.Services
                             if(y + 2 > mazeGrid.length -1)
                                 continue;
 
-                            if (mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == (y+2))).First().isWall == false)
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == (y+2))).First().isPath == false)
                             { 
-                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y + 2))).First().isWall = true;
-                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y + 1))).First().isWall = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y + 2))).First().isPath = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y + 1))).First().isPath = true;
 
                                 addValueToStack(x, y);
 
@@ -94,10 +94,10 @@ namespace MajorWork.Logic.Services
                             if (x + 2 >= mazeGrid.length - 1)
                                 continue;
 
-                            if (mazeGrid.mazeGrid.Where(a => (a.X == (x+2) && a.Y == y)).First().isWall == false)
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == (x+2) && a.Y == y)).First().isPath == false)
                             {
-                                mazeGrid.mazeGrid.Where(a => (a.X == (x + 2) && a.Y == (y))).First().isWall = true;
-                                mazeGrid.mazeGrid.Where(a => (a.X == (x + 1) && a.Y == (y))).First().isWall = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x + 2) && a.Y == (y))).First().isPath = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x + 1) && a.Y == (y))).First().isPath = true;
 
                                 addValueToStack(x, y);
 
@@ -111,10 +111,10 @@ namespace MajorWork.Logic.Services
                             if (y - 2 <= 0)
                                 continue;
 
-                            if (mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == (y-2))).First().isWall == false)
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == (y-2))).First().isPath == false)
                             {
-                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y - 1))).First().isWall = true;
-                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y - 2))).First().isWall = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y - 1))).First().isPath = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y - 2))).First().isPath = true;
 
                                 addValueToStack(x, y);
 

@@ -31,7 +31,7 @@ namespace MajorWork.ViewModels
         {
             maze.mazeGrid.ForEach(delegate(mazepoints s)
             {
-                if (s.isWall == true)
+                if (s.isPath == true)
                 {
                     GenerateRectangle(s);
                 } 
@@ -47,6 +47,18 @@ namespace MajorWork.ViewModels
             mazepoints finalCoord = new mazepoints(8, 8, false);
             Rectangle finalRect = DrawRect(244, 67, 54);
             AddChildToGrid(finalRect, finalCoord);
+        }
+
+        public void DrawPath(mazepoints s)
+        {
+            var myPath = DrawRect(76, 175, 80);
+            AddChildToGrid(myPath, s);
+        }
+
+        public void RemovePath(mazepoints s)
+        {
+            var pathToRemove = DrawRect(255, 255, 255);
+            AddChildToGrid(pathToRemove, s);
         }
 
         private void GenerateRectangle(mazepoints s)

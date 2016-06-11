@@ -10,13 +10,13 @@ namespace MajorWork.Logic.Models
     {
         public int X { get; set; }
         public int Y { get; set; }
-        public bool isWall { get; set; }
+        public bool isPath { get; set; }
 
         public mazepoints(int userX, int userY, bool userWall)
         {
             X = userX;
             Y = userY;
-            isWall = userWall;
+            isPath = userWall;
         }
     }
 }
