@@ -41,26 +41,36 @@ namespace MajorWork.ViewModels
         private void readyPlayer()
         {
             mazepoints startCoord = new mazepoints(0, 0, false);
-            GenerateRectangle(startCoord);
+            Rectangle startRect = DrawRect(76, 175, 80);
+            AddChildToGrid(startRect, startCoord);
+
+            mazepoints finalCoord = new mazepoints(8, 8, false);
+            Rectangle finalRect = DrawRect(244, 67, 54);
+            AddChildToGrid(finalRect, finalCoord);
         }
 
         private void GenerateRectangle(mazepoints s)
         {
-            Rectangle myRect = new Rectangle();
-            myRect = DrawRect(s, myRect);
-            grid.Children.Add(myRect);
-            Grid.SetRow(myRect, s.Y);
-            Grid.SetColumn(myRect, s.X);
+            var myRect = DrawRect(255, 255, 255);
+            AddChildToGrid(myRect, s);
         }
 
-        private Rectangle DrawRect(mazepoints s, Rectangle rect)
+        private Rectangle DrawRect( byte r, byte g, byte b)
         {
-            rect.Width = 50;
-            rect.Height = 50;
-            SolidColorBrush colourBrush = new SolidColorBrush(Color.FromRgb(255,255,255));
+            Rectangle myRect = new Rectangle();
+            myRect.Width = 50;
+            myRect.Height = 50;
+            SolidColorBrush colourBrush = new SolidColorBrush(Color.FromRgb(r, g, b));
             
-            rect.Fill = colourBrush;
-            return rect;
+            myRect.Fill = colourBrush;
+            return myRect;
+        }
+
+        private void AddChildToGrid(Rectangle val, mazepoints s)
+        {
+            grid.Children.Add(val);
+            Grid.SetRow(val, s.Y);
+            Grid.SetColumn(val, s.X);
         }
     }
 }

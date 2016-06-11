@@ -34,20 +34,13 @@ namespace MajorWork
 
             _mainWindow = MainWindow;
 
-            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+            this.PreviewKeyDown += new KeyEventHandler(MainWindow_PreviewKeyDown);
         }
 
-        void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            e.Handled = true;
 
-            //TODO Integrate into MazePlayService
-            if (e.Key == Key.Up)
-            {
-                Label Message = new Label
-                {
-                    Content = "Fired!"
-                };
-            }
         }
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
