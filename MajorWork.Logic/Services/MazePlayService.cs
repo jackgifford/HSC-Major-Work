@@ -12,27 +12,43 @@ namespace MajorWork.Logic.Services
     {
         private mazepoints _currentPoint;
         private maze _maze;
+        private List<mazepoints> playerPath; 
 
         public MazePlayService(maze maze)
         {
             _maze = maze;
             playermoves Fields = new playermoves();
+            List<mazepoints> _playerPath = new List<mazepoints>();
+            playerPath = _playerPath;
+            playerPath.Add(new mazepoints(0, 0, true, false));
         }
 
-        public void Gauntlent(moveList move)
-        {
-            if (true)
-                MoveSelection(_currentPoint, move);
-
-            if (false)
-                removePath();
-
-        }
-
-        public bool MoveSelection(mazepoints currentPoint, moveList move)
+        public bool Gauntlent(mazepoints currentPoint, moveList move)
         {
             _currentPoint = currentPoint;
+            //if (!MoveSelection(move))
+             //   return false;
+            if (currentPoint.isPartOfPath == false)
+            {
+                if (MoveSelection(move))
+                {
+                    _currentPoint.isPartOfPath = true;
+                    return true;
 
+                }
+            }
+
+
+            //if (_currentPoint.isPartOfPath == true)
+            //{
+            //    removePath();
+            //    return false;
+            //} 
+            return false;
+        }
+
+        public bool MoveSelection(moveList move)
+        {
             switch (move)
             {
                 case moveList.Up:

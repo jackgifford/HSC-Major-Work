@@ -40,11 +40,11 @@ namespace MajorWork.ViewModels
 
         private void readyPlayer()
         {
-            mazepoints startCoord = new mazepoints(0, 0, false);
+            mazepoints startCoord = new mazepoints(0, 0, false, false);
             Rectangle startRect = DrawRect(76, 175, 80);
             AddChildToGrid(startRect, startCoord);
 
-            mazepoints finalCoord = new mazepoints(8, 8, false);
+            mazepoints finalCoord = new mazepoints(8, 8, false, false);
             Rectangle finalRect = DrawRect(244, 67, 54);
             AddChildToGrid(finalRect, finalCoord);
         }

@@ -42,7 +42,7 @@ namespace MajorWork.Logic.Services
             {
                 for (int k = 0; k < mazeGrid.length; k++)
                 {
-                    mazeGrid.mazeGrid.Add(new mazepoints(j, k, false));
+                    mazeGrid.mazeGrid.Add(new mazepoints(j, k, false, false));
                 }
             }
         }

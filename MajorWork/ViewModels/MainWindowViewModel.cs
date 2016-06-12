@@ -33,7 +33,7 @@ namespace MajorWork.ViewModels
             MazePlayService play = new MazePlayService(_maze);
             _play = play;
 
-            mazepoints position = new mazepoints(0, 0, false);
+            mazepoints position = new mazepoints(0, 0, false, false);
             _position = position;
         }
 
@@ -42,21 +42,29 @@ namespace MajorWork.ViewModels
             switch (e.Key)
             {
                 case Key.Up:
-                    if (_play.MoveSelection(_position, moveList.Up))
+                    if (_play.Gauntlent(_position, moveList.Up))
                         _drawLibrary.DrawPath(_position);
+                    else
+                        _drawLibrary.RemovePath(_position);
                     break;
                 case Key.Down:
-                    if (_play.MoveSelection(_position, moveList.Down))
+                    if (_play.Gauntlent(_position, moveList.Down))
                         _drawLibrary.DrawPath(_position);
+                    else
+                        _drawLibrary.RemovePath(_position);
                     break;
                 case Key.Left:
-                    if (_play.MoveSelection(_position, moveList.Left))
+                    if (_play.Gauntlent(_position, moveList.Left))
                         _drawLibrary.DrawPath(_position);
+                    else
+                        _drawLibrary.RemovePath(_position);
                     break;
                 case Key.Right:
 
-                    if (_play.MoveSelection(_position, moveList.Right))
+                    if (_play.Gauntlent(_position, moveList.Right))
                         _drawLibrary.DrawPath(_position);
+                    else
+                        _drawLibrary.RemovePath(_position);
                     break;
 
             } 
