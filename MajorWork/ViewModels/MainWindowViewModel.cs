@@ -42,20 +42,20 @@ namespace MajorWork.ViewModels
             switch (e.Key)
             {
                 case Key.Up:
-                    if (_play.MoveSelection(_position, moveList.Up))
+                    if (_play.Gauntlet(_position, moveList.Up))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Down:
-                    if (_play.MoveSelection(_position, moveList.Down))
+                    if (_play.Gauntlet(_position, moveList.Down))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Left:
-                    if (_play.MoveSelection(_position, moveList.Left))
+                    if (_play.Gauntlet(_position, moveList.Left))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Right:
 
-                    if (_play.MoveSelection(_position, moveList.Right))
+                    if (_play.Gauntlet(_position, moveList.Right))
                         _drawLibrary.DrawPath(_position);
                     break;
 

@@ -12,20 +12,36 @@ namespace MajorWork.Logic.Services
     {
         private mazepoints _currentPoint;
         private maze _maze;
+        private List<mazepoints> _pathSolution;
 
         public MazePlayService(maze maze)
         {
             _maze = maze;
             playermoves Fields = new playermoves();
+            List<mazepoints> mazePath = new List<mazepoints>();
+
+            _pathSolution = mazePath;
+            _pathSolution.Add(new mazepoints(0, 0, true)); //Add starting coords
         }
 
-        public void Gauntlent(moveList move)
+        public bool Gauntlet(mazepoints postion, moveList move)
         {
-            if (true)
-                MoveSelection(_currentPoint, move);
+            if (MoveSelection(postion, move)) //Checks the move can be made
+            {
+               
+                foreach (var item in _pathSolution) //Iterate through list if mazepoint is there 
+                {
+                    if (item.X == _currentPoint.X && item.Y == _currentPoint.Y)
+                    {
+                        RemovePath();
+                    }
+                }
 
-            if (false)
-                removePath();
+                _pathSolution.Add(new mazepoints(_currentPoint.X, _currentPoint.Y, true)); 
+                return true;
+            }
+
+            return false;
 
         }
 
@@ -66,8 +82,10 @@ namespace MajorWork.Logic.Services
             return false;
         }
 
-        public void removePath()
+        public bool RemovePath()
         {
+            //Return false
+            
             throw new NotImplementedException();
         }
 
