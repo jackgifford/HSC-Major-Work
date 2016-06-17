@@ -28,15 +28,14 @@ namespace MajorWork.Logic.Services
             _currentPoint = currentPoint;
             //if (!MoveSelection(move))
              //   return false;
-            if (currentPoint.isPartOfPath == false)
-            {
+           
                 if (MoveSelection(move))
                 {
                     _currentPoint.isPartOfPath = true;
                     return true;
 
                 }
-            }
+           
 
 
             //if (_currentPoint.isPartOfPath == true)
@@ -91,7 +90,7 @@ namespace MajorWork.Logic.Services
         {
             try
             {
-                if (_maze.mazeGrid.Where(a => (a.X == (_currentPoint.X) && a.Y == (_currentPoint.Y))).First().isPath == true)
+                if (_maze.mazeGrid.Where(a => (a.X == (_currentPoint.X) && a.Y == (_currentPoint.Y) && a.isPartOfPath == false) ).First().isPath == true)
                     return true;
                 //Allow move, else do nothing, and draw new position
                 return false;
