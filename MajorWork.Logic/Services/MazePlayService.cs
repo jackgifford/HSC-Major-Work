@@ -84,6 +84,8 @@ namespace MajorWork.Logic.Services
 
         public bool RemovePath()
         {
+            //Remove positon from list
+            //Draw new position
             //Return false
             
             throw new NotImplementedException();

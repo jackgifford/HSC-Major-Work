@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 
+
 namespace MajorWork.ViewModels
 {
     public class MainWindowViewModel
@@ -20,11 +21,11 @@ namespace MajorWork.ViewModels
         private mazepoints _position;
         private MazePlayService _play;
 
-        public void Generate(Grid blank)
+        public void Generate(Grid blank, int userLength)
         {
             maze maze = new maze();
             _maze = maze;
-            MazeGenerationService GenMaze = new MazeGenerationService(10, 10, _maze); //Switch to custom width
+            MazeGenerationService GenMaze = new MazeGenerationService(userLength, userLength, _maze); //Switch to custom width
             _GenMaze = GenMaze;
 
             Draw mazeGraphic = new Draw(_maze, blank);

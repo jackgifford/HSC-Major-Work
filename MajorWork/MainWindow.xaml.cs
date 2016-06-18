@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.Threading;
+
 using MajorWork.ViewModels;
 
 namespace MajorWork
@@ -23,14 +25,15 @@ namespace MajorWork
     public partial class MainWindow : Window
     {
         private MainWindowViewModel _mainWindow;
-        public Grid gridBlank;
+        public Grid _gridBlank;
+        private int _UserLength;
 
         public MainWindow()
         {
             MainWindowViewModel MainWindow = new MainWindowViewModel();
             InitializeComponent();
-            generateGrid();
-            gridBlank = blank;
+            
+            _gridBlank = blank;
 
             _mainWindow = MainWindow;
 
@@ -39,20 +42,35 @@ namespace MajorWork
 
         void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            e.Handled = true;
-            _mainWindow.Play(blank, e);
+            if (e.Key == Key.Up | e.Key == Key.Left | e.Key == Key.Right | e.Key == Key.Down)
+            {
+                e.Handled = true;
+                _mainWindow.Play(blank, e);
+            }
+         
         }
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
-            if ((string)btnGenerate.Content == "Generate")
-            {
-                _mainWindow.Generate(blank);
-                blank.Visibility = Visibility.Visible;
-                btnGenerate.Content = "Clear";
-                return;
+            try 
+	        {
+		        _UserLength = Convert.ToInt32(lengthTxt.Text);
+                if ((string)btnGenerate.Content == "Generate")
+                {
+                    generateGrid();
+                    _mainWindow.Generate(blank, _UserLength);
+                    blank.Visibility = Visibility.Visible;
+                    btnGenerate.Content = "Clear";
+                    return;
 
-            }
+                }
+	        }
+	        catch (Exception)
+	        {
+                throw;
+	        }
+            
+           
 
             if ((string)btnGenerate.Content == "Clear")
             {
@@ -70,13 +88,13 @@ namespace MajorWork
             blank.ShowGridLines = false;
 
             //Column Definitions
-            for (int i = 0; i < 10; i++) //Change to user width
+            for (int i = 0; i < _UserLength; i++) //Change to user width
             {
                 blank.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
             //Row Definitons
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < _UserLength; i++)
             {
                 blank.RowDefinitions.Add(new RowDefinition());
             }

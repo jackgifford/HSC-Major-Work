@@ -29,7 +29,7 @@
                     <Label Content="Grid Dimensions" FontWeight="Bold" FontSize="14" />
                     <WrapPanel Margin="0,0,0,20">
                         <Label Content="Length:"/>
-                        <TextBox Width="40"></TextBox>
+                        <TextBox x:Name="lengthTxt" Width="40"></TextBox>
                         <Label Content="Width:" />
                         <TextBox Width="40"></TextBox>
                     </WrapPanel>
