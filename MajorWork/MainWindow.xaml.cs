@@ -64,7 +64,17 @@ namespace MajorWork
                     return;
 
                 }
-	        }
+
+                if ((string)btnGenerate.Content == "Clear")
+                {
+                    _mainWindow.Clear();
+                    blank.Children.Clear();
+                    blank.Visibility = Visibility.Hidden;
+                    btnGenerate.Content = "Generate";
+                    return;
+                }
+            }
+
 	        catch (Exception)
 	        {
                 throw;
@@ -72,14 +82,7 @@ namespace MajorWork
             
            
 
-            if ((string)btnGenerate.Content == "Clear")
-            {
-                _mainWindow.Clear();
-                blank.Children.Clear();
-                blank.Visibility = Visibility.Hidden;
-                btnGenerate.Content = "Generate";
-                return;
-            }
+            
         }
 
         private void generateGrid()

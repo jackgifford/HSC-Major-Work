@@ -32,7 +32,8 @@ namespace MajorWork.Logic.Services
             });
 
             GenerateEmptyGrid();
-            GenerateMaze(0,0);
+        
+            IterableGeneration(0,0);
             mazeGrid.mazeGrid.Where(a => (a.X == (0) && a.Y == 0)).First().isPath = true;
         }
 
@@ -45,6 +46,112 @@ namespace MajorWork.Logic.Services
                     mazeGrid.mazeGrid.Add(new mazepoints(j, k, false));
                 }
             }
+        }
+
+
+
+        private void RemoveFromStack(int x, int y)
+        {
+            stack pointToRemove = new stack();
+            pointToRemove.X = x;
+            pointToRemove.Y = y;
+            mazeGrid.mazeStack.Remove(pointToRemove);
+
+        }
+
+        private void IterableGeneration (int x, int y)
+        {
+            while (mazeGrid.mazeStack.Count != 0)
+            {
+                bool statement = false;
+                //Generate a random selection of integers
+                int[] randDirections = RandomDirections();
+
+                //Choose a direction to explore
+                for (int i = 0; i < randDirections.Length; i++)
+                {
+                    switch (randDirections[i])
+                    {
+                        case 0:
+                            if (x - 2 <= 0)
+                                continue;
+
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == (x - 2) && a.Y == y)).First().isPath == false)
+                            {
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x - 2) && a.Y == y)).First().isPath = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x - 1) && a.Y == y)).First().isPath = true;
+
+                                x = x - 2;
+                                addValueToStack(x, y);
+                                i = 5;
+                                statement = true;
+                            }
+                            break;
+
+                        case 1:
+                            if (y + 2 > mazeGrid.length - 1)
+                                continue;
+
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == (y + 2))).First().isPath == false)
+                            {
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y + 2))).First().isPath = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y + 1))).First().isPath = true;
+
+                                y = y + 2;
+                                addValueToStack(x, y);
+                                i = 5;
+                                statement = true;
+                            }
+                            break;
+
+                        case 2:
+                            if (x + 2 >= mazeGrid.length - 1)
+                                continue;
+
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == (x + 2) && a.Y == y)).First().isPath == false)
+                            {
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x + 2) && a.Y == (y))).First().isPath = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x + 1) && a.Y == (y))).First().isPath = true;
+
+                                x = x + 2;
+                                addValueToStack(x, y);
+                                i = 5;
+                                statement = true;
+                            }
+                            break;
+
+                        case 3:
+                            if (y - 2 <= 0)
+                                continue;
+
+                            if (mazeGrid.mazeGrid.Where(a => (a.X == x && a.Y == (y - 2))).First().isPath == false)
+                            {
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y - 1))).First().isPath = true;
+                                mazeGrid.mazeGrid.Where(a => (a.X == (x) && a.Y == (y - 2))).First().isPath = true;
+
+                                y = y - 2;
+                                addValueToStack(x, y);
+                                i = 5;
+                                statement = true;
+                            }
+                            break;
+
+                        default: //pop
+                            
+                            break;
+                    }
+                }
+                if (statement == false)
+                {
+                    var stackLength = mazeGrid.mazeStack.Count() - 1;
+
+                    x = mazeGrid.mazeStack[stackLength].X;
+                    y = mazeGrid.mazeStack[stackLength].Y;
+                    mazeGrid.mazeStack.RemoveAt(stackLength);
+                }
+
+            }
+
         }
 
         private void GenerateMaze(int x, int y)

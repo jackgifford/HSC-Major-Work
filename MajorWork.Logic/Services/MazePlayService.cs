@@ -84,6 +84,7 @@ namespace MajorWork.Logic.Services
 
         public bool RemovePath()
         {
+            _pathSolution.RemoveAt(_pathSolution.Count - 1);
             //Remove positon from list
             //Draw new position
             //Return false

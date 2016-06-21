@@ -28,10 +28,8 @@
                     <Label Content="Maze Properties" FontWeight="Bold" FontSize="18" />
                     <Label Content="Grid Dimensions" FontWeight="Bold" FontSize="14" />
                     <WrapPanel Margin="0,0,0,20">
-                        <Label Content="Length:"/>
+                        <Label Content="Length x Width:"/>
                         <TextBox x:Name="lengthTxt" Width="40"></TextBox>
-                        <Label Content="Width:" />
-                        <TextBox Width="40"></TextBox>
                     </WrapPanel>
                     <Label Content="Generation Speed" FontWeight="Bold" FontSize="14" />
                     <WrapPanel Margin="0,0,0,20">
