@@ -29,14 +29,6 @@ namespace MajorWork.ViewModels
 
         private void DrawMaze()
         {
-            //maze.mazeGrid.ForEach(delegate(mazepoints s)
-            //{
-            //    if (s.isPath == true)
-            //    {
-            //        GenerateRectangle(s);
-            //    } 
-            //});
-
             foreach (var item in maze.mazeGrid)
             {
                 if (item.isPath == true)
