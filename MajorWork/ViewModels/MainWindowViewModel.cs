@@ -20,7 +20,6 @@ namespace MajorWork.ViewModels
         private Draw _drawLibrary;
         private mazepoints _position;
         private MazePlayService _play;
-        private Grid mazeDisplay;
 
         public void Generate(Grid blank, int userLength)
         {
@@ -28,9 +27,15 @@ namespace MajorWork.ViewModels
             _maze = maze;
             MazeGenerationService GenMaze = new MazeGenerationService(userLength, userLength, _maze); //Switch to custom width
             _GenMaze = GenMaze;
-            mazeDisplay = blank;
 
-         
+            Draw mazeGraphic = new Draw(_maze, blank);
+            _drawLibrary = mazeGraphic;
+
+            MazePlayService play = new MazePlayService(_maze);
+            _play = play;
+
+            mazepoints position = new mazepoints(0, 0, false);
+            _position = position;
         }
 
         public void Play(Grid blank, KeyEventArgs e)
@@ -63,18 +68,6 @@ namespace MajorWork.ViewModels
             _maze = null;
             _GenMaze = null;
             _position = null;
-        }
-
-        public void Display()
-        {
-            Draw mazeGraphic = new Draw(_maze, mazeDisplay);
-            _drawLibrary = mazeGraphic;
-
-            MazePlayService play = new MazePlayService(_maze);
-            _play = play;
-
-            mazepoints position = new mazepoints(0, 0, false);
-            _position = position;
         }
     }
 }

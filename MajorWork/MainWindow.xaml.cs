@@ -16,7 +16,6 @@ using System.Windows.Shapes;
 using System.Threading;
 
 using MajorWork.ViewModels;
-using System.ComponentModel;
 
 namespace MajorWork
 {
@@ -28,7 +27,6 @@ namespace MajorWork
         private MainWindowViewModel _mainWindow;
         public Grid _gridBlank;
         private int _UserLength;
-        private BackgroundWorker worker = new BackgroundWorker();
 
         public MainWindow()
         {
@@ -40,25 +38,6 @@ namespace MajorWork
             _mainWindow = MainWindow;
 
             this.PreviewKeyDown += new KeyEventHandler(MainWindow_PreviewKeyDown);
-
-            worker.DoWork += worker_DoWork;
-            worker.ProgressChanged += worker_ProgressChanged;
-            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
-        }
-
-        void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-                throw new NotImplementedException();
-        }
-
-        void worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            _mainWindow.Generate(blank, _UserLength);
         }
 
         void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -79,11 +58,9 @@ namespace MajorWork
                 if ((string)btnGenerate.Content == "Generate")
                 {
                     generateGrid();
-                    worker.RunWorkerAsync();
-                    _mainWindow.Display();
+                    _mainWindow.Generate(blank, _UserLength);
                     blank.Visibility = Visibility.Visible;
                     btnGenerate.Content = "Clear";
-                    
                     return;
 
                 }
