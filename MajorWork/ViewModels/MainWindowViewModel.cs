@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using System.ComponentModel;
 using MajorWork.Logic.Services;
 using MajorWork.Logic.Models;
 using System.Windows.Controls;
@@ -15,27 +10,33 @@ namespace MajorWork.ViewModels
 {
     public class MainWindowViewModel
     {
-        private maze _maze;
-        private MazeGenerationService _GenMaze;
+        private Maze _maze;
+        private MazeGenerationService _genMaze;
         private Draw _drawLibrary;
-        private mazepoints _position;
+        private Mazepoints _position;
         private MazePlayService _play;
+        private BackgroundWorker _worker;
 
         public void Generate(Grid blank, int userLength)
         {
-            maze maze = new maze();
+            var maze = new Maze();
             _maze = maze;
-            MazeGenerationService GenMaze = new MazeGenerationService(userLength, userLength, _maze); //Switch to custom width
-            _GenMaze = GenMaze;
+            var genMaze = new MazeGenerationService(userLength, userLength, _maze); //Switch to custom width
+            _genMaze = genMaze;
 
-            Draw mazeGraphic = new Draw(_maze, blank);
-            _drawLibrary = mazeGraphic;
-
-            MazePlayService play = new MazePlayService(_maze);
+            var play = new MazePlayService(_maze);
             _play = play;
 
-            mazepoints position = new mazepoints(0, 0, false);
+            var position = new Mazepoints(0, 0, false);
             _position = position;
+
+
+        }
+
+        public void DrawGrid(Grid blank, int userLength)
+        {
+            var mazeGraphic = new Draw(_maze, blank);
+            _drawLibrary = mazeGraphic;
         }
 
         public void Play(Grid blank, KeyEventArgs e)
@@ -43,20 +44,20 @@ namespace MajorWork.ViewModels
             switch (e.Key)
             {
                 case Key.Up:
-                    if (_play.Gauntlet(_position, moveList.Up))
+                    if (_play.Gauntlet(_position, MoveList.Up))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Down:
-                    if (_play.Gauntlet(_position, moveList.Down))
+                    if (_play.Gauntlet(_position, MoveList.Down))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Left:
-                    if (_play.Gauntlet(_position, moveList.Left))
+                    if (_play.Gauntlet(_position, MoveList.Left))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Right:
 
-                    if (_play.Gauntlet(_position, moveList.Right))
+                    if (_play.Gauntlet(_position, MoveList.Right))
                         _drawLibrary.DrawPath(_position);
                     break;
 
@@ -66,7 +67,7 @@ namespace MajorWork.ViewModels
         public void Clear() 
         {
             _maze = null;
-            _GenMaze = null;
+            _genMaze = null;
             _position = null;
         }
     }

@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-using System.Threading;
 
 using MajorWork.ViewModels;
 
@@ -22,23 +12,50 @@ namespace MajorWork
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private MainWindowViewModel _mainWindow;
-        public Grid _gridBlank;
-        private int _UserLength;
+        private readonly MainWindowViewModel _mainWindow;
+        private int _userLength;
+        private readonly BackgroundWorker _worker;
 
         public MainWindow()
         {
-            MainWindowViewModel MainWindow = new MainWindowViewModel();
+            MainWindowViewModel mainWindow = new MainWindowViewModel();
             InitializeComponent();
+          
+
+            _mainWindow = mainWindow;
+
+            var backgroundWorker = new BackgroundWorker();
+            _worker = backgroundWorker;
+            _worker.DoWork += _worker_DoWork;
+            _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
+            _worker.ProgressChanged += _worker_ProgressChanged;
+            _worker.WorkerReportsProgress = true;
             
-            _gridBlank = blank;
 
-            _mainWindow = MainWindow;
-
-            this.PreviewKeyDown += new KeyEventHandler(MainWindow_PreviewKeyDown);
+            PreviewKeyDown += MainWindow_PreviewKeyDown;
         }
+
+        private void _worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            this.LoadingBar.Value += 100;
+        }
+
+        private void _worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            _mainWindow.Generate(blank, _userLength);
+            //Run all background tasks here
+        }
+
+        private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            _mainWindow.DrawGrid(blank, _userLength);
+            blank.Visibility = Visibility.Visible;
+            btnGenerate.Content = "Clear";
+            //Update UI once worker completed work
+        }
+
 
         void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -50,54 +67,52 @@ namespace MajorWork
          
         }
 
+      
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
-            try 
-	        {
-		        _UserLength = Convert.ToInt32(lengthTxt.Text);
-                if ((string)btnGenerate.Content == "Generate")
+            try
+            {
+                _userLength = Convert.ToInt32(lengthTxt.Text);
+                switch ((string) btnGenerate.Content)
                 {
-                    generateGrid();
-                    _mainWindow.Generate(blank, _UserLength);
-                    blank.Visibility = Visibility.Visible;
-                    btnGenerate.Content = "Clear";
-                    return;
+                    case "Generate":
 
-                }
-
-                if ((string)btnGenerate.Content == "Clear")
-                {
-                    _mainWindow.Clear();
-                    blank.Children.Clear();
-                    blank.Visibility = Visibility.Hidden;
-                    btnGenerate.Content = "Generate";
-                    return;
+                        CallBackGroundWorker();
+                        GenerateGrid();
+                        return;
+                    case "Clear":
+                        _mainWindow.Clear();
+                        blank.Children.Clear();
+                        blank.Visibility = Visibility.Hidden;
+                        btnGenerate.Content = "Generate";
+                        break;
                 }
             }
 
-	        catch (Exception)
-	        {
-                throw;
-	        }
-            
-           
-
-            
+            catch (Exception)
+            {
+                MessageBox.Show("Incorrect Input");
+            }
         }
 
-        private void generateGrid()
+        private void CallBackGroundWorker()
+        {
+            _worker.RunWorkerAsync();
+        }
+
+        private void GenerateGrid()
         {
             //Enable for debugging
             blank.ShowGridLines = false;
 
             //Column Definitions
-            for (int i = 0; i < _UserLength; i++) //Change to user width
+            for (int i = 0; i < _userLength; i++) //Change to user width
             {
                 blank.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
             //Row Definitons
-            for (int i = 0; i < _UserLength; i++)
+            for (int i = 0; i < _userLength; i++)
             {
                 blank.RowDefinitions.Add(new RowDefinition());
             }
@@ -105,7 +120,7 @@ namespace MajorWork
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Open your web browser?", "Yes and yes", MessageBoxButton.YesNo);
+            MessageBox.Show("Open your web browser?", "Yes and yes", MessageBoxButton.YesNo);
             
             System.Diagnostics.Process.Start("http://google.com");
         }

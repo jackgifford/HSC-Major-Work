@@ -1,75 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Windows;
 using System.Windows.Shapes;
 using MajorWork.Logic.Models;
-using MajorWork.Logic.Services;
 using System.Windows.Media;
 using System.Windows.Controls;
-using System.Windows;
-using System.Drawing;
 
 
 namespace MajorWork.ViewModels
 {
     class Draw
     {
-        private maze maze;
-        private Grid grid;
+        private readonly Maze _maze;
+        private readonly Grid _grid;
 
-        public Draw(maze mazeGrid, Grid blank)
+        public Draw(Maze mazeGrid, Grid blank)
         {
-            maze = mazeGrid;
-            grid = blank;
+            _maze = mazeGrid;
+            _grid = blank;
             DrawMaze();
-            readyPlayer();
+            ReadyPlayer();
         }
 
         private void DrawMaze()
         {
-            //maze.mazeGrid.ForEach(delegate(mazepoints s)
-            //{
-            //    if (s.isPath == true)
-            //    {
-            //        GenerateRectangle(s);
-            //    } 
-            //});
-
-            foreach (var item in maze.mazeGrid)
+            foreach (var item in _maze.MazeGrid)
             {
-                if (item.isPath == true)
+                if (item.IsPath)
                 {
                     GenerateRectangle(item);
                 }
             }
         }
     
-        private void readyPlayer()
+        private void ReadyPlayer()
         {
-            mazepoints startCoord = new mazepoints(0, 0, false);
-            Rectangle startRect = DrawRect(76, 175, 80);
+            Mazepoints startCoord = new Mazepoints(0, 0, false);
+            UIElement startRect = DrawRect(76, 175, 80);
             AddChildToGrid(startRect, startCoord);
 
-            mazepoints finalCoord = new mazepoints(8, 8, false);
-            Rectangle finalRect = DrawRect(244, 67, 54);
+            Mazepoints finalCoord = new Mazepoints(8, 8, false);
+            UIElement finalRect = DrawRect(244, 67, 54);
             AddChildToGrid(finalRect, finalCoord);
         }
 
-        public void DrawPath(mazepoints s)
+        public void DrawPath(Mazepoints s)
         {
             var myPath = DrawRect(76, 175, 80);
             AddChildToGrid(myPath, s);
         }
 
-        public void RemovePath(mazepoints s)
+        public void RemovePath(Mazepoints s)
         {
             var pathToRemove = DrawRect(255, 255, 255);
             AddChildToGrid(pathToRemove, s);
         }
 
-        private void GenerateRectangle(mazepoints s)
+        private void GenerateRectangle(Mazepoints s)
         {
             var myRect = DrawRect(255, 255, 255);
             AddChildToGrid(myRect, s);
@@ -86,9 +71,9 @@ namespace MajorWork.ViewModels
             return myRect;
         }
 
-        private void AddChildToGrid(Rectangle val, mazepoints s)
+        private void AddChildToGrid(UIElement val, Mazepoints s)
         {
-            grid.Children.Add(val);
+            _grid.Children.Add(val);
             Grid.SetRow(val, s.Y);
             Grid.SetColumn(val, s.X);
         }

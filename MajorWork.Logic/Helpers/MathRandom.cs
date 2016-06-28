@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace MajorWork.Logic.Helpers
 {
@@ -13,13 +10,13 @@ namespace MajorWork.Logic.Helpers
         /// All numbers are now generated psuedo-randomly, and the code remains thread-safe.
         /// Relevant XKCD: https://xkcd.com/221/
         /// </summary>
-        private static readonly Random getrandom = new Random();
-        private static readonly object syncLock = new object();
+        private static readonly Random Getrandom = new Random();
+        private static readonly object SyncLock = new object();
         public static int GetRandomNumber(int min, int max)
         {
-            lock (syncLock)
+            lock (SyncLock)
             { // synchronise
-                return getrandom.Next(min, max);
+                return Getrandom.Next(min, max);
             }
         }
     }
