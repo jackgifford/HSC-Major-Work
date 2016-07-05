@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using MajorWork.Logic.Models;
 using MajorWork.Logic.Helpers;
+using System.ComponentModel;
 
 namespace MajorWork.Logic.Services
 {
@@ -10,6 +11,8 @@ namespace MajorWork.Logic.Services
     public class MazeGenerationService
     {
         private readonly Maze _mazeGrid;
+
+
 
         public MazeGenerationService(int userLength, int userWidth, Maze mazeGridUser)
         {
@@ -25,7 +28,6 @@ namespace MajorWork.Logic.Services
             });
 
             GenerateEmptyGrid();
-        
             IterableGeneration(0,0);
             _mazeGrid.MazeGrid.First(a => (a.X == (0) && a.Y == 0)).IsPath = true;
         }

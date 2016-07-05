@@ -15,21 +15,31 @@ namespace MajorWork.ViewModels
         private Draw _drawLibrary;
         private Mazepoints _position;
         private MazePlayService _play;
-        private BackgroundWorker _worker;
+        
+        public delegate void ProgressUpdate(int value);
+        public event ProgressUpdate OnProgressUpdate;
 
         public void Generate(Grid blank, int userLength)
         {
             var maze = new Maze();
             _maze = maze;
-            var genMaze = new MazeGenerationService(userLength, userLength, _maze); //Switch to custom width
+            if (OnProgressUpdate != null) //Can still be called without subscription to an event
+                OnProgressUpdate(20);
+
+            var genMaze = new MazeGenerationService(userLength, userLength, _maze); 
             _genMaze = genMaze;
+
+            if (OnProgressUpdate != null)
+                OnProgressUpdate(70);   
 
             var play = new MazePlayService(_maze);
             _play = play;
 
+            if (OnProgressUpdate != null)
+                OnProgressUpdate(10);
+
             var position = new Mazepoints(0, 0, false);
             _position = position;
-
 
         }
 
@@ -60,7 +70,6 @@ namespace MajorWork.ViewModels
                     if (_play.Gauntlet(_position, MoveList.Right))
                         _drawLibrary.DrawPath(_position);
                     break;
-
             } 
         }
 

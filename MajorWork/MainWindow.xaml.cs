@@ -30,16 +30,19 @@ namespace MajorWork
             _worker = backgroundWorker;
             _worker.DoWork += _worker_DoWork;
             _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
-            _worker.ProgressChanged += _worker_ProgressChanged;
             _worker.WorkerReportsProgress = true;
-            
+            _mainWindow.OnProgressUpdate += _mainWindow_OnProgressUpdate; //Invoke _mainWindow_OnProgressUpdate whenever the OnProgressUpdate event is called in _mainWindow
 
             PreviewKeyDown += MainWindow_PreviewKeyDown;
         }
 
-        private void _worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        void _mainWindow_OnProgressUpdate(int value) //Return to ui thread
         {
-            this.LoadingBar.Value += 100;
+            Dispatcher.Invoke((Action)delegate
+            {
+                this.LoadingBar.Value += value;
+            });
+            
         }
 
         private void _worker_DoWork(object sender, DoWorkEventArgs e)
@@ -51,7 +54,10 @@ namespace MajorWork
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             _mainWindow.DrawGrid(blank, _userLength);
+            
             blank.Visibility = Visibility.Visible;
+            this.LoadingBar.Visibility = Visibility.Collapsed;
+            this.LoadingScreen.Visibility = Visibility.Collapsed;
             btnGenerate.Content = "Clear";
             //Update UI once worker completed work
         }
@@ -64,9 +70,7 @@ namespace MajorWork
                 e.Handled = true;
                 _mainWindow.Play(blank, e);
             }
-         
         }
-
       
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
@@ -76,7 +80,8 @@ namespace MajorWork
                 switch ((string) btnGenerate.Content)
                 {
                     case "Generate":
-
+                        this.LoadingBar.Visibility = Visibility.Visible;
+                        this.LoadingScreen.Visibility = Visibility.Visible;
                         CallBackGroundWorker();
                         GenerateGrid();
                         return;
@@ -120,9 +125,8 @@ namespace MajorWork
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Open your web browser?", "Yes and yes", MessageBoxButton.YesNo);
+            var value = MessageBox.Show("Open your web browser?", "Yes and yes", MessageBoxButton.YesNo);
             
-            System.Diagnostics.Process.Start("http://google.com");
         }
     }
 }

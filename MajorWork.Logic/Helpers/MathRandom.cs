@@ -14,8 +14,8 @@ namespace MajorWork.Logic.Helpers
         private static readonly object SyncLock = new object();
         public static int GetRandomNumber(int min, int max)
         {
-            lock (SyncLock)
-            { // synchronise
+            lock (SyncLock) //Should random generation be called from separate threads "random" integers will still be returned
+            {
                 return Getrandom.Next(min, max);
             }
         }
