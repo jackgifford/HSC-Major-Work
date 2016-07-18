@@ -73,6 +73,11 @@ namespace MajorWork.ViewModels
             } 
         }
 
+        public void Solve()
+        {
+            var solver = new MazeSolveService();
+        }
+
         public void Clear() 
         {
             _maze = null;

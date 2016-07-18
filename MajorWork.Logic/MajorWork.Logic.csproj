@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MoreLinq, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows" />
@@ -44,6 +48,8 @@
   <ItemGroup>
     <Compile Include="Helpers\MathRandom.cs" />
     <Compile Include="Helpers\ObservableObject.cs" />
+    <Compile Include="Models\AStar.cs" />
+    <Compile Include="Models\Heuristic.cs" />
     <Compile Include="Models\Maze.cs" />
     <Compile Include="Models\Mazepoints.cs" />
     <Compile Include="Models\PlayerMoves.cs" />
@@ -51,9 +57,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\MazeGenerationService.cs" />
     <Compile Include="Services\MazePlayService.cs" />
+    <Compile Include="Services\MazeSolveService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

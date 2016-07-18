@@ -128,5 +128,10 @@ namespace MajorWork
             var value = MessageBox.Show("Open your web browser?", "Yes and yes", MessageBoxButton.YesNo);
             
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            _mainWindow.Solve();
+        }
     }
 }

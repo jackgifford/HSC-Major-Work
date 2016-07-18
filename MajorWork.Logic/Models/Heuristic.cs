@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace MajorWork.Logic.Models
 {
-    class Heuristic
+    public class Heuristic 
     {
+
         public int DeltaX { get; set; }
         public int DeltaY { get; set; }
-        public int H { get; set; }
+        public int H { get; set; } //Heuristic
+        public int G { get; set; } //Cost function from start
+
     }
 
 
