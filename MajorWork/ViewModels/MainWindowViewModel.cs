@@ -75,7 +75,7 @@ namespace MajorWork.ViewModels
 
         public void Solve()
         {
-            var solver = new MazeSolveService();
+            var solver = new MazeSolveService(_maze.MazeGrid);
         }
 
         public void Clear() 

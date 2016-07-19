@@ -12,8 +12,6 @@ namespace MajorWork.Logic.Services
     {
         private readonly Maze _mazeGrid;
 
-
-
         public MazeGenerationService(int userLength, int userWidth, Maze mazeGridUser)
         {
             _mazeGrid = mazeGridUser;
@@ -43,7 +41,7 @@ namespace MajorWork.Logic.Services
             }
         }
 
-        private void IterableGeneration (int x, int y)
+        private void IterableGeneration(int x, int y)
         {
             while (_mazeGrid.MazeStack.Count != 0)
             {
@@ -61,7 +59,7 @@ namespace MajorWork.Logic.Services
                                 continue;
 
                             if (_mazeGrid.MazeGrid.First(a => (a.X == (x - 2) && a.Y == y)).IsPath == false)
-                            {                      
+                            {
                                 _mazeGrid.MazeGrid.First(a => (a.X == (x - 2) && a.Y == y)).IsPath = true;
                                 _mazeGrid.MazeGrid.First(a => (a.X == (x - 1) && a.Y == y)).IsPath = true;
 
@@ -77,7 +75,7 @@ namespace MajorWork.Logic.Services
                                 continue;
 
                             if (_mazeGrid.MazeGrid.First(a => (a.X == x && a.Y == (y + 2))).IsPath == false)
-                            {                   
+                            {
                                 _mazeGrid.MazeGrid.First(a => (a.X == (x) && a.Y == (y + 2))).IsPath = true;
                                 _mazeGrid.MazeGrid.First(a => (a.X == (x) && a.Y == (y + 1))).IsPath = true;
 
@@ -135,8 +133,6 @@ namespace MajorWork.Logic.Services
             }
 
         }
-
-        
 
         private void AddValueToStack(int x, int y)
         {

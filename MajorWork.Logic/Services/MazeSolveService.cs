@@ -8,45 +8,61 @@ namespace MajorWork.Logic.Services
 {
     public class MazeSolveService
     {
-        private List<AStar> OpenSet;
-        private List<AStar> ClosedSet;
-        private List<AStar> EntireMaze;
-        private List<Mazepoints> mazeCoords;
+        private List<AStar> _openSet;
+        private List<AStar> _closedSet;
+        private List<AStar> _entireMaze;
+        private List<AStar> _solution;
+        private List<Mazepoints> _mazeCoords;
 
-        private int finalX;
-        private int finalY;
+        private readonly AStar _startPoint;
+        private readonly AStar _target;
+    
 
-        public MazeSolveService()
+        public MazeSolveService(List<Mazepoints> mazeCoords)
         {
-
-            OpenSet.Add(new AStar //Add the starting position to the open list
+            _mazeCoords = mazeCoords;
+            _entireMaze = new List<AStar>();
+            _openSet = new List<AStar>();
+            _closedSet = new List<AStar>();
+            _target = new AStar
             {
-                X = 0,
-                Y = 0
-            });
+                X = 8,
+                Y = 8
+            };
 
-            mazeCoords.ForEach(item => EntireMaze.Add(new AStar { X = item.X, Y = item.Y})); //Get all the nodes into a list that can be used by the AStar algorithm
+            //Fix these hardcoded values once AStar is properly implmented
 
-            foreach (var child in EntireMaze) //Preprocess every heursitic in the maze but only process those that aren't walls
-                child.H = HeuristicCalculator(child.X, child.Y, finalX, finalY);
+
+            foreach (var child in mazeCoords) //Get all the nodes into a list that can be used by the AStar algorithm
+            {
+                if (child.IsPath)
+                {
+                   _entireMaze.Add(new AStar {X = child.X, Y = child.Y});
+                }
+            }
+
+            _openSet.Add(_entireMaze.First(x => (x.X == 0) && (x.Y == 0)));
+
+            foreach (var child in _entireMaze) //Preprocess every heursitic in the maze but only process those that aren't walls
+                child.H = HeuristicCalculator(child.X, child.Y);
             
 
             AStar(); //Galvanise
-            BuildSolution();
+            _solution = BuildSolution(); 
         }
 
-        private int HeuristicCalculator(int x, int y, int final1, int final2) //Based off Manhattan Distance
+        private int HeuristicCalculator(int x, int y) //Based off Manhattan Distance
         {
-            return Math.Abs(finalX - x) + Math.Abs(finalY - y);
+            return Math.Abs(_target.X - x) + Math.Abs(_target.Y - y);
         }
 
         private void AStar()
         {
-            while (OpenSet.Count > 0)
+            while (_openSet.Count > 0 || _closedSet.Contains(_target))
             {
-                var current = OpenSet.MinBy(x => x.F); //Return AStar object with the cheapest cost function in the openlist
-                OpenSet.Remove(current);
-                ClosedSet.Add(current);
+                var current = _openSet.MinBy(x => x.F); //Return AStar object with the cheapest cost function in the openlist, using MoreLinq because I didn't know how to implement this
+                _openSet.Remove(current);
+                _closedSet.Add(current);
 
                 var neighbours = BuildNeighbourList(current);
 
@@ -54,35 +70,49 @@ namespace MajorWork.Logic.Services
                 {
                     var cost = current.G + 1;
 
-                    if (OpenSet.Contains(neighbour) && neighbour.G < current.G)
-                        OpenSet.Remove(neighbour);
+                    //If it's in closed list ignore it
 
-                    if (ClosedSet.Contains(neighbour) && neighbour.G < current.G)
-                        ClosedSet.Remove(neighbour);
-                    
-                    if (!OpenSet.Contains(neighbour) && !ClosedSet.Contains(neighbour))
+                    if (!_openSet.Contains(neighbour))
                     {
+                        _openSet.Add(neighbour);
+                        neighbour.Parent = current;
                         neighbour.G = cost;
-                        OpenSet.Add(neighbour);
+                        neighbour.F = neighbour.G + neighbour.H;
+                        //Calculate F, G & H
+                    }
+
+                    if (_openSet.Contains(neighbour) && neighbour.G < current.G)
+                    {
+                        neighbour.Parent = current;
+                        neighbour.G = cost;
+                        neighbour.F = neighbour.G + neighbour.H;
                     }
                 }
             }
         }
 
-        private IEnumerable<AStar> BuildNeighbourList(AStar current) 
+        private IEnumerable<AStar> BuildNeighbourList(AStar current) //Implement tests to make sure neighbours are within range
         {
             return new List<AStar>(new[]
             {
-                EntireMaze.First(x => (x.X == current.X) && (x.Y == current.Y + 1)), //Up
-                EntireMaze.First(x => (x.X == current.X) && (x.Y == current.Y - 1)), //Down
-                EntireMaze.First(x => (x.X == current.X - 1) && (x.Y == current.Y)), //Left
-                EntireMaze.First(x => (x.X == current.X + 1) && (x.Y == current.Y)) //Right
+                _entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y + 1)), //Up
+                _entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y - 1)), //Down
+                _entireMaze.First(x => (x.X == current.X - 1) && (x.Y == current.Y)), //Left
+                _entireMaze.First(x => (x.X == current.X + 1) && (x.Y == current.Y)) //Right
             });
         } 
 
-        private void BuildSolution()
+        private List<AStar> BuildSolution() //Builds a list that goes from target location to the entry point of the maze
         {
+            var path = new List<AStar>();
+            var current = _target; //Start at the target
+            do
+            {
+                path.Add(current);
+                current = current.Parent; //Call the targets parent
+            } while (current != _startPoint);
 
+            return path;
         }
     }
 }
