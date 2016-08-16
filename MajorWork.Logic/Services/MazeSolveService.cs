@@ -11,8 +11,10 @@ namespace MajorWork.Logic.Services
         private List<AStar> _openSet;
         private List<AStar> _closedSet;
         private List<AStar> _entireMaze;
-        private List<AStar> _solution;
+        public List<AStar> _solution;
         private List<Mazepoints> _mazeCoords;
+
+        private int _length; //Update with a real value
 
         private readonly AStar _startPoint;
         private readonly AStar _target;
@@ -30,6 +32,9 @@ namespace MajorWork.Logic.Services
                 Y = 8
             };
 
+            
+            
+
             //Fix these hardcoded values once AStar is properly implmented
 
 
@@ -45,8 +50,8 @@ namespace MajorWork.Logic.Services
 
             foreach (var child in _entireMaze) //Preprocess every heursitic in the maze but only process those that aren't walls
                 child.H = HeuristicCalculator(child.X, child.Y);
-            
 
+            _length = _entireMaze.Max(x => x.Y);
             AStar(); //Galvanise
             _solution = BuildSolution(); 
         }
@@ -93,24 +98,34 @@ namespace MajorWork.Logic.Services
 
         private IEnumerable<AStar> BuildNeighbourList(AStar current) //Implement tests to make sure neighbours are within range
         {
-            return new List<AStar>(new[]
-            {
-                _entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y + 1)), //Up
-                _entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y - 1)), //Down
-                _entireMaze.First(x => (x.X == current.X - 1) && (x.Y == current.Y)), //Left
-                _entireMaze.First(x => (x.X == current.X + 1) && (x.Y == current.Y)) //Right
-            });
+            var list = new List<AStar>(); //Crashes as soon as it tries to find a wall
+
+            if (current.Y - 1 >= 0 )
+                list.Add(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y - 1)));
+
+            if (current.Y + 1 <= _length)
+                list.Add(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y + 1)));
+
+            if (current.X - 1 >= 0)
+
+                list.Add(_entireMaze.First(x => (x.X == current.X - 1) && (x.Y == current.Y)));
+
+            if (current.X + 1 <= _length)
+                list.Add(_entireMaze.First(x => (x.X == current.X + 1) && (x.Y == current.Y)));
+
+            return list;
         } 
 
         private List<AStar> BuildSolution() //Builds a list that goes from target location to the entry point of the maze
         {
             var path = new List<AStar>();
             var current = _target; //Start at the target
-            do
+
+            while (current != _startPoint)
             {
                 path.Add(current);
-                current = current.Parent; //Call the targets parent
-            } while (current != _startPoint);
+                current = current.Parent;
+            }
 
             return path;
         }

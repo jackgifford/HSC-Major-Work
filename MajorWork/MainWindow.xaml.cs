@@ -90,6 +90,8 @@ namespace MajorWork
                         blank.Children.Clear();
                         blank.Visibility = Visibility.Hidden;
                         btnGenerate.Content = "Generate";
+                        blank.ColumnDefinitions.Clear();
+                        blank.RowDefinitions.Clear();
                         break;
                 }
             }

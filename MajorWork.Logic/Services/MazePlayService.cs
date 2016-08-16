@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
-
 using MajorWork.Logic.Models;
 
 namespace MajorWork.Logic.Services

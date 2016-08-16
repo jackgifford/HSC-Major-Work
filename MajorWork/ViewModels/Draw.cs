@@ -3,7 +3,7 @@ using System.Windows.Shapes;
 using MajorWork.Logic.Models;
 using System.Windows.Media;
 using System.Windows.Controls;
-
+using System.Collections.Generic;
 
 namespace MajorWork.ViewModels
 {
@@ -42,6 +42,17 @@ namespace MajorWork.ViewModels
             AddChildToGrid(finalRect, finalCoord);
         }
 
+        public void DrawSolution(List<AStar> solution)
+        {
+            var solutionToDraw = DrawRect(174, 213, 129);
+
+            foreach (var position in solution)
+            {
+                AddChildToGrid(solutionToDraw, position);
+            }
+            
+        }
+
         public void DrawPath(Mazepoints s)
         {
             var myPath = DrawRect(76, 175, 80);
@@ -72,6 +83,13 @@ namespace MajorWork.ViewModels
         }
 
         private void AddChildToGrid(UIElement val, Mazepoints s)
+        {
+            _grid.Children.Add(val);
+            Grid.SetRow(val, s.Y);
+            Grid.SetColumn(val, s.X);
+        }
+
+        private void AddChildToGrid(UIElement val, AStar s)
         {
             _grid.Children.Add(val);
             Grid.SetRow(val, s.Y);
