@@ -122,11 +122,7 @@ namespace MajorWork.Logic.Services
                         {
                             _openSet.Add(neighbour);
                             _iterableList.Add(neighbour);
-                            if (neighbour.X == 8 && neighbour.Y == 8)
-                            {
-                                
-                                
-                            }
+
                             Debug.WriteLine("Added {0}, {1}", neighbour.X, neighbour.Y);
                             Debug.WriteLine("Parent coords are:  {0} {1} ", neighbour.Parent.X, neighbour.Parent.Y);
                         }
