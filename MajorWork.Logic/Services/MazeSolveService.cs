@@ -1,6 +1,11 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using MajorWork.Logic.Models;
 using MoreLinq;
 
@@ -11,20 +16,20 @@ namespace MajorWork.Logic.Services
         private List<AStar> _openSet;
         private List<AStar> _closedSet;
         private List<AStar> _entireMaze;
-        public List<AStar> _solution;
         private List<Mazepoints> _mazeCoords;
-
         private int _length; //Update with a real value
-
         private readonly AStar _startPoint;
-        private readonly AStar _target;
-    
+        private AStar _target;
+
+        public List<AStar> _iterableList;
+        public List<AStar> _solution;
 
         public MazeSolveService(List<Mazepoints> mazeCoords)
         {
             _mazeCoords = mazeCoords;
             _entireMaze = new List<AStar>();
             _openSet = new List<AStar>();
+            _iterableList = new List<AStar>();
             _closedSet = new List<AStar>();
             _target = new AStar
             {
@@ -32,9 +37,12 @@ namespace MajorWork.Logic.Services
                 Y = 8
             };
 
-            
-            
-
+            _startPoint = new AStar
+            {
+                X = 0,
+                Y = 0,
+                F = 0,
+            };
             //Fix these hardcoded values once AStar is properly implmented
 
 
@@ -46,14 +54,14 @@ namespace MajorWork.Logic.Services
                 }
             }
 
-            _openSet.Add(_entireMaze.First(x => (x.X == 0) && (x.Y == 0)));
+            
 
             foreach (var child in _entireMaze) //Preprocess every heursitic in the maze but only process those that aren't walls
                 child.H = HeuristicCalculator(child.X, child.Y);
 
             _length = _entireMaze.Max(x => x.Y);
-            AStar(); //Galvanise
-            _solution = BuildSolution(); 
+            AStarDiff(); //Galvanise
+
         }
 
         private int HeuristicCalculator(int x, int y) //Based off Manhattan Distance
@@ -61,73 +69,118 @@ namespace MajorWork.Logic.Services
             return Math.Abs(_target.X - x) + Math.Abs(_target.Y - y);
         }
 
-        private void AStar()
+        private void AStarDiff()
         {
-            while (_openSet.Count > 0 || _closedSet.Contains(_target))
+            var h = HeuristicCalculator(0, 0);
+            var f = h + 0;
+            var start = new AStar
             {
-                var current = _openSet.MinBy(x => x.F); //Return AStar object with the cheapest cost function in the openlist, using MoreLinq because I didn't know how to implement this
+                X = 0,
+                Y = 0,
+                G = 0,
+                H = h,
+                F = f 
+            };
+
+            _openSet.Add(start);
+
+            while (_openSet.Count > 0)
+            {
+                var current = _openSet.MinBy(x => x.F); //Find the cheapest value in the openset and make it the current
+
+                if (current.X == _target.X && current.Y == _target.Y)
+                {
+                    
+                    _solution = BuildSolution(current);
+                }
+
+
                 _openSet.Remove(current);
                 _closedSet.Add(current);
 
+
                 var neighbours = BuildNeighbourList(current);
 
-                foreach (var neighbour in neighbours) 
+                foreach (var neighbour in neighbours)
                 {
-                    var cost = current.G + 1;
-
-                    //If it's in closed list ignore it
-
-                    if (!_openSet.Contains(neighbour))
-                    {
-                        _openSet.Add(neighbour);
-                        neighbour.Parent = current;
-                        neighbour.G = cost;
-                        neighbour.F = neighbour.G + neighbour.H;
-                        //Calculate F, G & H
-                    }
-
-                    if (_openSet.Contains(neighbour) && neighbour.G < current.G)
-                    {
-                        neighbour.Parent = current;
-                        neighbour.G = cost;
-                        neighbour.F = neighbour.G + neighbour.H;
-                    }
+                    neighbour.G = current.G + 1;
+                    neighbour.Parent = current;
+                    neighbour.F = neighbour.G + HeuristicCalculator(neighbour.X, neighbour.Y);
                 }
+
+                //Finds the four neighbours to current, and stores them in a list
+
+                foreach (var neighbour in neighbours)
+                {
+
+                    //Find the x that corresponds with neighbour in the list and replace it
+                    if (_closedSet.Exists(x => (x.X == neighbour.X) && x.Y == neighbour.Y) == false) //If not in closed list
+                    {
+                        neighbour.F = neighbour.G + HeuristicCalculator(neighbour.X, neighbour.Y);
+
+                        if (_openSet.Exists(x => (x.X == neighbour.X) && x.Y == neighbour.Y) == false) //If not in open list
+                        {
+                            _openSet.Add(neighbour);
+                            _iterableList.Add(neighbour);
+                            if (neighbour.X == 8 && neighbour.Y == 8)
+                            {
+                                
+                                
+                            }
+                            Debug.WriteLine("Added {0}, {1}", neighbour.X, neighbour.Y);
+                            Debug.WriteLine("Parent coords are:  {0} {1} ", neighbour.Parent.X, neighbour.Parent.Y);
+                        }
+
+                        else
+                        {
+                            var openNeighbour = _openSet.First(x => x.X == neighbour.X && x.Y == neighbour.Y);
+
+                            if (neighbour.G < openNeighbour.G)
+                            {
+                                openNeighbour.Parent = neighbour.Parent;
+                                openNeighbour.G = neighbour.G;
+                            }
+                        }
+                    }
+
+                }
+              
             }
         }
 
-        private IEnumerable<AStar> BuildNeighbourList(AStar current) //Implement tests to make sure neighbours are within range
+        private List<AStar> BuildNeighbourList(AStar current) //If statements make sure the neighbour is within range of the grid and that no wall exists
         {
-            var list = new List<AStar>(); //Crashes as soon as it tries to find a wall
+            var list = new List<AStar>(); 
 
-            if (current.Y - 1 >= 0 )
+            if (current.Y - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X) && (x.Y == current.Y - 1) ).IsPath) //Up
                 list.Add(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y - 1)));
 
-            if (current.Y + 1 <= _length)
+            if (current.Y + 1 <= _length && _mazeCoords.First(x => (x.X == current.X ) && (x.Y == current.Y + 1)).IsPath) //Down
                 list.Add(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y + 1)));
 
-            if (current.X - 1 >= 0)
-
+            if (current.X - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X - 1) && (x.Y == current.Y)).IsPath) //Left
                 list.Add(_entireMaze.First(x => (x.X == current.X - 1) && (x.Y == current.Y)));
 
-            if (current.X + 1 <= _length)
+            if (current.X + 1 <= _length && _mazeCoords.First(x => (x.X == current.X + 1) && (x.Y == current.Y)).IsPath) //Right
                 list.Add(_entireMaze.First(x => (x.X == current.X + 1) && (x.Y == current.Y)));
 
             return list;
-        } 
+        }
+        //Builds a list that goes from target location to the entry point of the maze
 
-        private List<AStar> BuildSolution() //Builds a list that goes from target location to the entry point of the maze
+        private List<AStar> BuildSolution(AStar finalPos) 
         {
-            var path = new List<AStar>();
-            var current = _target; //Start at the target
+            var list = new List<AStar>();
+            var start = _iterableList.First();
 
-            while (current != _startPoint)
+
+            while (finalPos.Parent != null)
             {
-                path.Add(current);
-                current = current.Parent;
+                list.Add(finalPos);
+                finalPos = finalPos.Parent;
             }
 
-            return path;
+            return list;
         }
     }
 }

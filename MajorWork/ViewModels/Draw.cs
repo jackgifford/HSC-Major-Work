@@ -48,7 +48,8 @@ namespace MajorWork.ViewModels
 
             foreach (var position in solution)
             {
-                AddChildToGrid(solutionToDraw, position);
+                var tempMazePoint = new Mazepoints(position.X, position.Y, true);
+                AddChildToGrid(solutionToDraw, tempMazePoint);
             }
             
         }
