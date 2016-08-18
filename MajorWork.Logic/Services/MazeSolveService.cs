@@ -1,11 +1,7 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
 using MajorWork.Logic.Models;
 using MoreLinq;
 
@@ -18,18 +14,17 @@ namespace MajorWork.Logic.Services
         private List<AStar> _entireMaze;
         private List<Mazepoints> _mazeCoords;
         private int _length; //Update with a real value
-        private readonly AStar _startPoint;
         private AStar _target;
 
-        public List<AStar> _iterableList;
-        public List<AStar> _solution;
+        public List<AStar> IterableList;
+        public List<AStar> Solution;
 
         public MazeSolveService(List<Mazepoints> mazeCoords)
         {
             _mazeCoords = mazeCoords;
             _entireMaze = new List<AStar>();
             _openSet = new List<AStar>();
-            _iterableList = new List<AStar>();
+            IterableList = new List<AStar>();
             _closedSet = new List<AStar>();
             _target = new AStar
             {
@@ -37,12 +32,6 @@ namespace MajorWork.Logic.Services
                 Y = 8
             };
 
-            _startPoint = new AStar
-            {
-                X = 0,
-                Y = 0,
-                F = 0,
-            };
             //Fix these hardcoded values once AStar is properly implmented
 
 
@@ -91,7 +80,8 @@ namespace MajorWork.Logic.Services
                 if (current.X == _target.X && current.Y == _target.Y)
                 {
                     
-                    _solution = BuildSolution(current);
+                    Solution = BuildSolution(current);
+                    return;
                 }
 
 
@@ -113,6 +103,12 @@ namespace MajorWork.Logic.Services
                 foreach (var neighbour in neighbours)
                 {
 
+                    if (neighbour.X == _target.X && neighbour.Y == _target.Y)
+                    {
+                        BuildSolution(neighbour);
+                    }
+                    
+                    
                     //Find the x that corresponds with neighbour in the list and replace it
                     if (_closedSet.Exists(x => (x.X == neighbour.X) && x.Y == neighbour.Y) == false) //If not in closed list
                     {
@@ -121,12 +117,7 @@ namespace MajorWork.Logic.Services
                         if (_openSet.Exists(x => (x.X == neighbour.X) && x.Y == neighbour.Y) == false) //If not in open list
                         {
                             _openSet.Add(neighbour);
-                            _iterableList.Add(neighbour);
-                            if (neighbour.X == 8 && neighbour.Y == 8)
-                            {
-                                
-                                
-                            }
+                            
                             Debug.WriteLine("Added {0}, {1}", neighbour.X, neighbour.Y);
                             Debug.WriteLine("Parent coords are:  {0} {1} ", neighbour.Parent.X, neighbour.Parent.Y);
                         }
@@ -171,8 +162,6 @@ namespace MajorWork.Logic.Services
         private List<AStar> BuildSolution(AStar finalPos) 
         {
             var list = new List<AStar>();
-            var start = _iterableList.First();
-
 
             while (finalPos.Parent != null)
             {
