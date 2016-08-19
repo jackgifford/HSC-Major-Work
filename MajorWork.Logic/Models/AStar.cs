@@ -15,6 +15,7 @@ namespace MajorWork.Logic.Models
         public int F { get; set; } // G + H
         public AStarState State { get; set; }
         public AStar Parent { get; set; }
+        public bool HasParent { get; set; }
     }
 
     public enum AStarState

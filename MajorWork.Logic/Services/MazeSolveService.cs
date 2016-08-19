@@ -49,7 +49,8 @@ namespace MajorWork.Logic.Services
                 child.H = HeuristicCalculator(child.X, child.Y);
 
             _length = _entireMaze.Max(x => x.Y);
-            AStarDiff(); //Galvanise
+            var CurrentPosition = AStarDiff(); //Galvanise
+            BuildSolution(CurrentPosition);
 
         }
 
@@ -58,7 +59,7 @@ namespace MajorWork.Logic.Services
             return Math.Abs(_target.X - x) + Math.Abs(_target.Y - y);
         }
 
-        private void AStarDiff()
+        private AStar AStarDiff()
         {
             var h = HeuristicCalculator(0, 0);
             var f = h + 0;
@@ -68,22 +69,22 @@ namespace MajorWork.Logic.Services
                 Y = 0,
                 G = 0,
                 H = h,
-                F = f 
+                F = f
             };
 
             _openSet.Add(start);
+
+            AStar FinalPosition = new AStar(); 
 
             while (_openSet.Count > 0)
             {
                 var current = _openSet.MinBy(x => x.F); //Find the cheapest value in the openset and make it the current
 
-                if (current.X == _target.X && current.Y == _target.Y)
+                if (current.X == _target.X && current.Y == _target.Y)  //path found
                 {
-                    
-                    Solution = BuildSolution(current);
-                    return;
+                    FinalPosition = current;
+                    break;
                 }
-
 
                 _openSet.Remove(current);
                 _closedSet.Add(current);
@@ -91,22 +92,23 @@ namespace MajorWork.Logic.Services
 
                 var neighbours = BuildNeighbourList(current);
 
-                foreach (var neighbour in neighbours)
-                {
-                    neighbour.G = current.G + 1;
-                    neighbour.Parent = current;
-                    neighbour.F = neighbour.G + HeuristicCalculator(neighbour.X, neighbour.Y);
-                }
+                //Tidier to handle the below in the BuildNieghbourList function
+                //foreach (var neighbour in neighbours)
+                //{
+                //    neighbour.G = current.G + 1;
+                //    neighbour.Parent = current;
+                //    neighbour.F = neighbour.G + HeuristicCalculator(neighbour.X, neighbour.Y);
+                //}
 
                 //Finds the four neighbours to current, and stores them in a list
 
                 foreach (var neighbour in neighbours)
                 {
 
-                    if (neighbour.X == _target.X && neighbour.Y == _target.Y)
-                    {
-                        BuildSolution(neighbour);
-                    }
+                    //if (neighbour.X == _target.X && neighbour.Y == _target.Y)
+                    //{
+                    //    FinalPosition = neighbour;
+                    //}
                     
                     
                     //Find the x that corresponds with neighbour in the list and replace it
@@ -137,27 +139,50 @@ namespace MajorWork.Logic.Services
                 }
               
             }
+            //Need to handle if comes here without finding a final position - i.e. no path exists
+            return FinalPosition;
         }
 
         private List<AStar> BuildNeighbourList(AStar current) //If statements make sure the neighbour is within range of the grid and that no wall exists
         {
-            var list = new List<AStar>(); 
+            var list = new List<AStar>();
 
-            if (current.Y - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X) && (x.Y == current.Y - 1) ).IsPath) //Up
-                list.Add(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y - 1)));
-
-            if (current.Y + 1 <= _length && _mazeCoords.First(x => (x.X == current.X ) && (x.Y == current.Y + 1)).IsPath) //Down
-                list.Add(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y + 1)));
-
-            if (current.X - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X - 1) && (x.Y == current.Y)).IsPath) //Left
-                list.Add(_entireMaze.First(x => (x.X == current.X - 1) && (x.Y == current.Y)));
-
-            if (current.X + 1 <= _length && _mazeCoords.First(x => (x.X == current.X + 1) && (x.Y == current.Y)).IsPath) //Right
-                list.Add(_entireMaze.First(x => (x.X == current.X + 1) && (x.Y == current.Y)));
-
+            if (current.Y - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X) && (x.Y == current.Y - 1)).IsPath)
+            {
+                list.Add(AddNeighbourdata(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y - 1)), current));
+            }
+                          
+            if (current.Y + 1 <= _length && _mazeCoords.First(x => (x.X == current.X ) && (x.Y == current.Y + 1)).IsPath)
+            {
+                list.Add(AddNeighbourdata(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y + 1)), current));
+            }
+                
+            if (current.X - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X - 1) && (x.Y == current.Y)).IsPath)
+            {
+                list.Add(AddNeighbourdata(_entireMaze.First(x => (x.X == current.X - 1) && (x.Y == current.Y)), current));
+            }
+               
+            if (current.X + 1 <= _length && _mazeCoords.First(x => (x.X == current.X + 1) && (x.Y == current.Y)).IsPath)
+            {
+                list.Add(AddNeighbourdata(_entireMaze.First(x => (x.X == current.X + 1) && (x.Y == current.Y)), current));
+            }
+                
             return list;
         }
         //Builds a list that goes from target location to the entry point of the maze
+
+        private AStar AddNeighbourdata (AStar neighbour, AStar current)
+        {
+            AStar neighbourEntry = new AStar();
+            neighbourEntry.State = neighbour.State;
+            neighbourEntry.X = neighbour.X;
+            neighbourEntry.Y = neighbour.Y;
+            neighbourEntry.H = neighbour.H;
+            neighbourEntry.G = current.G + 1;
+            neighbourEntry.Parent = current;
+            neighbourEntry.F = neighbourEntry.G + HeuristicCalculator(neighbourEntry.X, neighbourEntry.Y);
+            return neighbourEntry;
+        }
 
         private List<AStar> BuildSolution(AStar finalPos) 
         {
