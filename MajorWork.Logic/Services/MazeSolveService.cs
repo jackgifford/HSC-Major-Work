@@ -50,7 +50,7 @@ namespace MajorWork.Logic.Services
 
             _length = _entireMaze.Max(x => x.Y);
             var CurrentPosition = AStarDiff(); //Galvanise
-            BuildSolution(CurrentPosition);
+            Solution = BuildSolution(CurrentPosition);
 
         }
 
@@ -173,6 +173,8 @@ namespace MajorWork.Logic.Services
 
         private AStar AddNeighbourdata (AStar neighbour, AStar current)
         {
+            //Note to Jack. Need to be careful when copying classes as you don't make a copy you actually just copy the reference. So AStar B = AStar A means that any changes you make to B will also make the same change to A. 
+            //Read up and understand the difference between stack and heap memory - is important.
             AStar neighbourEntry = new AStar();
             neighbourEntry.State = neighbour.State;
             neighbourEntry.X = neighbour.X;
