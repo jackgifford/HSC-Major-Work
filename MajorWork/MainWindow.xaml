@@ -1,7 +1,7 @@
 ﻿<Window x:Class="MajorWork.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="431" Width="728"  TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Title="Haramaze" Height="431" Width="728"  TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     Background="{DynamicResource MaterialDesignPaper}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
     <Grid>
