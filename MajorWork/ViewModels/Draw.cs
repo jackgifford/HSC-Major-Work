@@ -44,12 +44,10 @@ namespace MajorWork.ViewModels
 
         public void DrawSolution(List<AStar> solution)
         {
-            var solutionToDraw = DrawRect(174, 213, 129);
-
             foreach (var position in solution)
             {
                 var tempMazePoint = new Mazepoints(position.X, position.Y, true);
-                AddChildToGrid(solutionToDraw, tempMazePoint);
+                GenerateRectangle2(tempMazePoint);
             }
             
         }
@@ -72,6 +70,12 @@ namespace MajorWork.ViewModels
             AddChildToGrid(myRect, s);
         }
 
+        private void GenerateRectangle2(Mazepoints s)
+        {
+            var myRect = DrawRect(174, 213, 129);
+            AddChildToGrid(myRect, s);
+        }
+
         private Rectangle DrawRect( byte r, byte g, byte b)
         {
             Rectangle myRect = new Rectangle();
@@ -90,7 +94,7 @@ namespace MajorWork.ViewModels
             Grid.SetColumn(val, s.X);
         }
 
-        private void AddChildToGrid(UIElement val, AStar s)
+        private void AddChildToGrid2(UIElement val, Mazepoints s)
         {
             _grid.Children.Add(val);
             Grid.SetRow(val, s.Y);

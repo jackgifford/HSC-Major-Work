@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Squirrel;
 
 namespace MajorWork
 {
@@ -13,5 +14,6 @@ namespace MajorWork
     /// </summary>
     public partial class App : Application
     {
+
     }
 }
