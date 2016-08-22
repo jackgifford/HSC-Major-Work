@@ -91,7 +91,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\MathRandom.cs" />
-    <Compile Include="Helpers\ObservableObject.cs" />
     <Compile Include="Models\AStar.cs" />
     <Compile Include="Models\Heuristic.cs" />
     <Compile Include="Models\Maze.cs" />

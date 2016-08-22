@@ -15,7 +15,7 @@ namespace MajorWork.Logic.Services
         public MazeGenerationService(int userLength, int userWidth, Maze mazeGridUser)
         {
             _mazeGrid = mazeGridUser;
-            
+
             _mazeGrid.Width = userWidth;
             _mazeGrid.Length = userLength;
 
@@ -26,12 +26,12 @@ namespace MajorWork.Logic.Services
             });
 
             GenerateEmptyGrid();
-            IterableGeneration(0,0);
+            IterableGeneration(0, 0);
             _mazeGrid.MazeGrid.First(a => (a.X == (0) && a.Y == 0)).IsPath = true;
         }
 
         private void GenerateEmptyGrid()
-        {         
+        {
             for (int j = 0; j < _mazeGrid.Width; j++)
             {
                 for (int k = 0; k < _mazeGrid.Length; k++)
@@ -150,7 +150,7 @@ namespace MajorWork.Logic.Services
             for (int i = 0; i < randoms.Length; i++)
             {
                 randoms[i] = i;
-            }       
+            }
 
             for (int i = randoms.Length; i > 1; i--)
             {

@@ -17,7 +17,7 @@ namespace MajorWork.Logic.Services
 
         public readonly List<AStar> Solution;
 
-        public MazeSolveService(List<Mazepoints> mazeCoords)
+        public MazeSolveService(List<Mazepoints> mazeCoords, Mazepoints finalCoords)
         {
             _mazeCoords = mazeCoords;
             _entireMaze = new List<AStar>();
@@ -25,8 +25,8 @@ namespace MajorWork.Logic.Services
             _closedSet = new List<AStar>();
             _target = new AStar
             {
-                X = 8,
-                Y = 8
+                X = finalCoords.X,
+                Y = finalCoords.Y
             };
 
             //Fix these hardcoded values once AStar is properly implmented
@@ -36,11 +36,11 @@ namespace MajorWork.Logic.Services
             {
                 if (child.IsPath)
                 {
-                   _entireMaze.Add(new AStar {X = child.X, Y = child.Y});
+                    _entireMaze.Add(new AStar { X = child.X, Y = child.Y });
                 }
             }
 
-            
+
 
             foreach (var child in _entireMaze) //Preprocess every heursitic in the maze but only process those that aren't walls
                 child.H = HeuristicCalculator(child.X, child.Y);
@@ -73,7 +73,7 @@ namespace MajorWork.Logic.Services
 
             _openSet.Add(start);
 
-            AStar finalPosition = new AStar(); 
+            AStar finalPosition = new AStar();
 
             while (_openSet.Count > 0)
             {
@@ -92,7 +92,7 @@ namespace MajorWork.Logic.Services
 
                 foreach (var neighbour in neighbours)
                 {
-                    
+
                     //Find the x that corresponds with neighbour in the list and replace it
                     if (_closedSet.Exists(x => (x.X == neighbour.X) && x.Y == neighbour.Y) == false) //If not in closed list
                     {
@@ -100,7 +100,7 @@ namespace MajorWork.Logic.Services
 
                         if (_openSet.Exists(x => (x.X == neighbour.X) && x.Y == neighbour.Y) == false) //If not in open list
                             _openSet.Add(neighbour);
-                        
+
                         else
                         {
                             var openNeighbour = _openSet.First(x => x.X == neighbour.X && x.Y == neighbour.Y);
@@ -114,7 +114,7 @@ namespace MajorWork.Logic.Services
                     }
 
                 }
-              
+
             }
             //Need to handle if comes here without finding a final position - i.e. no path exists
             return finalPosition;
@@ -125,29 +125,28 @@ namespace MajorWork.Logic.Services
             var list = new List<AStar>();
 
             if (current.Y - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X) && (x.Y == current.Y - 1)).IsPath)
-                list.Add(AddNeighbourdata(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y - 1)), current));
+                list.Add(AddNeighbourData(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y - 1)), current));
 
-            if (current.Y + 1 <= _length && _mazeCoords.First(x => (x.X == current.X ) && (x.Y == current.Y + 1)).IsPath)
-                list.Add(AddNeighbourdata(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y + 1)), current));
+            if (current.Y + 1 <= _length && _mazeCoords.First(x => (x.X == current.X) && (x.Y == current.Y + 1)).IsPath)
+                list.Add(AddNeighbourData(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y + 1)), current));
 
 
             if (current.X - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X - 1) && (x.Y == current.Y)).IsPath)
-                list.Add(AddNeighbourdata(_entireMaze.First(x => (x.X == current.X - 1) && (x.Y == current.Y)), current));
+                list.Add(AddNeighbourData(_entireMaze.First(x => (x.X == current.X - 1) && (x.Y == current.Y)), current));
 
             if (current.X + 1 <= _length && _mazeCoords.First(x => (x.X == current.X + 1) && (x.Y == current.Y)).IsPath)
-                list.Add(AddNeighbourdata(_entireMaze.First(x => (x.X == current.X + 1) && (x.Y == current.Y)), current));
+                list.Add(AddNeighbourData(_entireMaze.First(x => (x.X == current.X + 1) && (x.Y == current.Y)), current));
 
             return list;
         }
-        
 
-        private AStar AddNeighbourdata (AStar neighbour, AStar current) //Stack and heap memory
+
+        private AStar AddNeighbourData(AStar neighbour, AStar current) //Stack and heap memory
         {
             //Note to Jack. Need to be careful when copying classes as you don't make a copy you actually just copy the reference. So AStar B = AStar A means that any changes you make to B will also make the same change to A. 
             //Read up and understand the difference between stack and heap memory - is important.
             AStar neighbourEntry = new AStar
-            {
-                State = neighbour.State,
+            { 
                 X = neighbour.X,
                 Y = neighbour.Y,
                 H = neighbour.H,
@@ -158,7 +157,7 @@ namespace MajorWork.Logic.Services
             return neighbourEntry;
         }
 
-        private static List<AStar> BuildSolution(AStar finalPos) 
+        private static List<AStar> BuildSolution(AStar finalPos)
         {
             var list = new List<AStar>();
 

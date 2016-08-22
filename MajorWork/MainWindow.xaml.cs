@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -20,10 +21,8 @@ namespace MajorWork
 
         public MainWindow()
         {
-            MainWindowViewModel mainWindow = new MainWindowViewModel();
+            var mainWindow = new MainWindowViewModel();
             InitializeComponent();
-          
-
             _mainWindow = mainWindow;
 
             var backgroundWorker = new BackgroundWorker();
@@ -32,8 +31,9 @@ namespace MajorWork
             _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
             _worker.WorkerReportsProgress = true;
             _mainWindow.OnProgressUpdate += _mainWindow_OnProgressUpdate; //Invoke _mainWindow_OnProgressUpdate whenever the OnProgressUpdate event is called in _mainWindow
-
             PreviewKeyDown += MainWindow_PreviewKeyDown;
+
+            RunTut();
         }
 
         void _mainWindow_OnProgressUpdate(int value) //Return to ui thread
@@ -42,7 +42,7 @@ namespace MajorWork
             {
                 this.LoadingBar.Value += value;
             });
-            
+
         }
 
         private void _worker_DoWork(object sender, DoWorkEventArgs e)
@@ -54,7 +54,7 @@ namespace MajorWork
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             _mainWindow.DrawGrid(blank, _userLength);
-            
+
             blank.Visibility = Visibility.Visible;
             this.LoadingBar.Visibility = Visibility.Collapsed;
             this.LoadingScreen.Visibility = Visibility.Collapsed;
@@ -71,17 +71,18 @@ namespace MajorWork
                 _mainWindow.Play(blank, e);
             }
         }
-      
+
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 _userLength = Convert.ToInt32(lengthTxt.Text);
-                switch ((string) btnGenerate.Content)
+                switch ((string)btnGenerate.Content)
                 {
                     case "Generate":
                         this.LoadingBar.Visibility = Visibility.Visible;
                         this.LoadingScreen.Visibility = Visibility.Visible;
+                        this.btnSolve.IsEnabled = true;
                         CallBackGroundWorker();
                         GenerateGrid();
                         return;
@@ -90,6 +91,7 @@ namespace MajorWork
                         blank.Children.Clear();
                         blank.Visibility = Visibility.Hidden;
                         btnGenerate.Content = "Generate";
+                        this.btnSolve.IsEnabled = false;
                         blank.ColumnDefinitions.Clear();
                         blank.RowDefinitions.Clear();
                         break;
@@ -98,7 +100,7 @@ namespace MajorWork
 
             catch (Exception)
             {
-                MessageBox.Show("Incorrect Input");
+                MessageBox.Show("Please insert a number");
             }
         }
 
@@ -114,26 +116,45 @@ namespace MajorWork
 
             //Column Definitions
             for (int i = 0; i < _userLength; i++) //Change to user width
-            {
                 blank.ColumnDefinitions.Add(new ColumnDefinition());
-            }
+
 
             //Row Definitons
             for (int i = 0; i < _userLength; i++)
-            {
                 blank.RowDefinitions.Add(new RowDefinition());
-            }
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void AboutItem_Click(object sender, RoutedEventArgs e)
         {
-            var value = MessageBox.Show("Open your web browser?", "Yes and yes", MessageBoxButton.YesNo);
-            
+            var value = MessageBox.Show("Open your web browser?", "Maze Generator", MessageBoxButton.YesNo);
+            if (value == MessageBoxResult.Yes)
+                System.Diagnostics.Process.Start("http://shmacktus.github.io/HSC-Major-Work");
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btnSolve_Click(object sender, RoutedEventArgs e)
         {
             _mainWindow.Solve();
+        }
+
+        private void RunTut()
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            if (config.AppSettings.Settings["Tutorial"].Value == "True")
+            {
+                //Launch message box
+                var value =
+                    MessageBox.Show(
+                        "Hi! Since this is your first time running the application would you like to open the tutorial in your web browser?",
+                        "Maze Generator: Tutorial", MessageBoxButton.YesNo);
+
+                if (value == MessageBoxResult.Yes)
+                    System.Diagnostics.Process.Start("http://shmacktus.github.io/HSC-Major-Work");
+
+                config.AppSettings.Settings["Tutorial"].Value = "False";
+                config.Save(ConfigurationSaveMode.Modified);
+            }
+
+
         }
     }
 }

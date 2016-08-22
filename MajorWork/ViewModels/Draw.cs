@@ -11,11 +11,14 @@ namespace MajorWork.ViewModels
     {
         private readonly Maze _maze;
         private readonly Grid _grid;
+        private Mazepoints _finalCoords;
 
-        public Draw(Maze mazeGrid, Grid blank)
+        public Draw(Maze mazeGrid, Grid blank, Mazepoints finalCoords)
         {
             _maze = mazeGrid;
             _grid = blank;
+            _finalCoords = finalCoords;
+
             DrawMaze();
             ReadyPlayer();
         }
@@ -30,16 +33,16 @@ namespace MajorWork.ViewModels
                 }
             }
         }
-    
+
         private void ReadyPlayer()
         {
             Mazepoints startCoord = new Mazepoints(0, 0, false);
             UIElement startRect = DrawRect(76, 175, 80);
             AddChildToGrid(startRect, startCoord);
 
-            Mazepoints finalCoord = new Mazepoints(8, 8, false);
+            //Mazepoints finalCoord = new Mazepoints(8, 8, false);
             UIElement finalRect = DrawRect(244, 67, 54);
-            AddChildToGrid(finalRect, finalCoord);
+            AddChildToGrid(finalRect, _finalCoords);
         }
 
         public void DrawSolution(List<AStar> solution)
@@ -49,7 +52,7 @@ namespace MajorWork.ViewModels
                 var tempMazePoint = new Mazepoints(position.X, position.Y, true);
                 GenerateRectangle2(tempMazePoint);
             }
-            
+
         }
 
         public void DrawPath(Mazepoints s)
@@ -76,13 +79,13 @@ namespace MajorWork.ViewModels
             AddChildToGrid(myRect, s);
         }
 
-        private Rectangle DrawRect( byte r, byte g, byte b)
+        private Rectangle DrawRect(byte r, byte g, byte b)
         {
             Rectangle myRect = new Rectangle();
             myRect.Width = 50;
             myRect.Height = 50;
             SolidColorBrush colourBrush = new SolidColorBrush(Color.FromRgb(r, g, b));
-            
+
             myRect.Fill = colourBrush;
             return myRect;
         }

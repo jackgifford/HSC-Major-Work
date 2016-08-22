@@ -9,7 +9,7 @@
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
                     <MenuItem Header="_Print"/>
-                    <MenuItem Header="_About" Click="MenuItem_Click" />
+                    <MenuItem Header="_About" Click="AboutItem_Click" />
                 </MenuItem>
                 <MenuItem Header="_Help"/>
             </Menu>
@@ -55,7 +55,7 @@
                     <WrapPanel HorizontalAlignment="Center" >
                         <Button x:Name="btnGenerate" Content="Generate" Margin="0,0,5,0" Click="btnGenerate_Click"/>
 
-                        <Button Content="Solve" Margin="5,0,0,0" Click="Button_Click"  />
+                        <Button x:Name="btnSolve" Content="Solve" Margin="5,0,0,0" Click="btnSolve_Click"  />
                     </WrapPanel>
                 </StackPanel>
             </Grid>

@@ -13,9 +13,9 @@ namespace MajorWork.Logic.Models
         public int G { get; set; } //Cost from start node to this node
         public int H { get; set; } //Huesitic
         public int F { get; set; } // G + H
-        public AStarState State { get; set; }
+        //public AStarState State { get; set; }
         public AStar Parent { get; set; }
-        public bool HasParent { get; set; }
+        //public bool HasParent { get; set; }
     }
 
     public enum AStarState

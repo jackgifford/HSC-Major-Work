@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using MajorWork.Logic.Helpers;
 
 namespace MajorWork.Logic.Models
 {
-    public class Maze : ObservableObject
+    public class Maze 
     {
         private int _width;
         private int _length;

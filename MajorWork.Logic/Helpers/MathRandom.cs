@@ -3,7 +3,7 @@
 
 namespace MajorWork.Logic.Helpers
 {
-    static class MathRandom
+    public static class MathRandom
     {
         /// <summary>
         /// Due to Random() producing the same variables a helper class has been implemented. 
