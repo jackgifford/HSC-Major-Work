@@ -28,6 +28,7 @@ namespace MajorWork.Logic.Services
             GenerateEmptyGrid();
             IterableGeneration(0, 0);
             _mazeGrid.MazeGrid.First(a => (a.X == (0) && a.Y == 0)).IsPath = true;
+            DifficultyIncrease();
         }
 
         private void GenerateEmptyGrid()
@@ -50,11 +51,13 @@ namespace MajorWork.Logic.Services
                 int[] randDirections = RandomDirections();
 
                 //Choose a direction to explore
-                for (int i = 0; i < randDirections.Length; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     switch (randDirections[i])
                     {
                         case 0:
+                        case 5:
+                        case 7:
                             if (x - 2 <= 0)
                                 continue;
 
@@ -71,6 +74,8 @@ namespace MajorWork.Logic.Services
                             break;
 
                         case 1:
+                        
+
                             if (y + 2 > _mazeGrid.Length - 1)
                                 continue;
 
@@ -87,6 +92,8 @@ namespace MajorWork.Logic.Services
                             break;
 
                         case 2:
+                        case 6:
+                        case 8:
                             if (x + 2 >= _mazeGrid.Length - 1)
                                 continue;
 
@@ -104,6 +111,7 @@ namespace MajorWork.Logic.Services
                             break;
 
                         case 3:
+                       
                             if (y - 2 <= 0)
                                 continue;
 
@@ -134,6 +142,19 @@ namespace MajorWork.Logic.Services
 
         }
 
+        private void DifficultyIncrease()
+        {
+            foreach (var child in _mazeGrid.MazeGrid)
+            {
+                var decisionToRemove = MathRandom.GetRandomNumber(0, 20);
+                if (decisionToRemove == 5)
+                {
+                    child.IsPath = true;
+                }
+
+            }
+        }
+
         private void AddValueToStack(int x, int y)
         {
             _mazeGrid.MazeStack.Add(new Stack
@@ -145,7 +166,7 @@ namespace MajorWork.Logic.Services
 
         private static int[] RandomDirections()
         {
-            int[] randoms = new int[4];
+            int[] randoms = new int[8];
 
             for (int i = 0; i < randoms.Length; i++)
             {
