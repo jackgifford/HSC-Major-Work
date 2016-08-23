@@ -28,8 +28,8 @@
                     <Label Content="Maze Properties" FontWeight="Bold" FontSize="18" />
                     <Label Content="Grid Dimensions" FontWeight="Bold" FontSize="14" />
                     <WrapPanel Margin="0,0,0,20">
-                        <Label Content="Length x Width:"/>
-                        <TextBox x:Name="lengthTxt" Width="40"></TextBox>
+                        <Label Content="Length:"/>
+                        <TextBox x:Name="LengthTxt" Width="40"></TextBox>
                     </WrapPanel>
                     
                     <Label Content="Maze Loading" FontWeight="Bold" FontSize="14" x:Name="LoadingScreen" Visibility="Collapsed" />
@@ -39,23 +39,23 @@
                     <StackPanel Margin="0,0,0,20">
                         <WrapPanel>
                             <Label Content="Red:" Width="45"/>
-                            <Slider Maximum="255" Width="100"/>
+                            <Slider x:Name="SliderRed" Maximum="255" Width="100"/>
 
                         </WrapPanel>
                         <WrapPanel>
                             <Label Content="Green:" Width="45"/>
-                            <Slider Maximum="255" Width="100"/>
+                            <Slider x:Name="SliderGreen" Maximum="255" Width="100"/>
                         </WrapPanel>
                         <WrapPanel>
                             <Label Content="Blue:" Width="45"/>
-                            <Slider Maximum="255" Width="100" />
+                            <Slider x:Name="SliderBlue" Maximum="255" Width="100" />
                         </WrapPanel>
 
                     </StackPanel>
                     <WrapPanel HorizontalAlignment="Center" >
-                        <Button x:Name="btnGenerate" Content="Generate" Margin="0,0,5,0" Click="btnGenerate_Click"/>
+                        <Button x:Name="BtnGenerate" Content="Generate" Margin="0,0,5,0" Click="btnGenerate_Click"/>
 
-                        <Button x:Name="btnSolve" Content="Solve" Margin="5,0,0,0" Click="btnSolve_Click"  />
+                        <Button x:Name="BtnSolve" Content="Solve" Margin="5,0,0,0" Click="btnSolve_Click"  />
                     </WrapPanel>
                 </StackPanel>
             </Grid>

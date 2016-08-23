@@ -18,6 +18,9 @@ namespace MajorWork
         private readonly MainWindowViewModel _mainWindow;
         private int _userLength;
         private readonly BackgroundWorker _worker;
+        private byte _red;
+        private byte _green;
+        private byte _blue;
 
         public MainWindow()
         {
@@ -38,9 +41,9 @@ namespace MajorWork
 
         void _mainWindow_OnProgressUpdate(int value) //Return to ui thread
         {
-            Dispatcher.Invoke((Action)delegate
+            Dispatcher.Invoke(delegate
             {
-                this.LoadingBar.Value += value;
+                LoadingBar.Value += value;
             });
 
         }
@@ -53,12 +56,12 @@ namespace MajorWork
 
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            _mainWindow.DrawGrid(blank, _userLength);
+            _mainWindow.DrawGrid(blank, _red, _green, _blue);
 
             blank.Visibility = Visibility.Visible;
-            this.LoadingBar.Visibility = Visibility.Collapsed;
-            this.LoadingScreen.Visibility = Visibility.Collapsed;
-            btnGenerate.Content = "Clear";
+            LoadingBar.Visibility = Visibility.Collapsed;
+            LoadingScreen.Visibility = Visibility.Collapsed;
+            BtnGenerate.Content = "Clear";
             //Update UI once worker completed work
         }
 
@@ -68,7 +71,7 @@ namespace MajorWork
             if (e.Key == Key.Up | e.Key == Key.Left | e.Key == Key.Right | e.Key == Key.Down)
             {
                 e.Handled = true;
-                _mainWindow.Play(blank, e);
+                _mainWindow.Play(e);
             }
         }
 
@@ -76,22 +79,28 @@ namespace MajorWork
         {
             try
             {
-                _userLength = Convert.ToInt32(lengthTxt.Text);
-                switch ((string)btnGenerate.Content)
+                _userLength = Convert.ToInt32(LengthTxt.Text);
+                switch ((string)BtnGenerate.Content)
                 {
                     case "Generate":
-                        this.LoadingBar.Visibility = Visibility.Visible;
-                        this.LoadingScreen.Visibility = Visibility.Visible;
-                        this.btnSolve.IsEnabled = true;
+                        LoadingBar.Visibility = Visibility.Visible;
+                        LoadingScreen.Visibility = Visibility.Visible;
+                        BtnSolve.IsEnabled = true;
+                        _red = (byte) SliderRed.Value;
+                        _blue = (byte) SliderBlue.Value;
+                        _green = (byte) SliderGreen.Value;
+
                         CallBackGroundWorker();
                         GenerateGrid();
-                        return;
+
+                        break;
+
                     case "Clear":
                         _mainWindow.Clear();
                         blank.Children.Clear();
                         blank.Visibility = Visibility.Hidden;
-                        btnGenerate.Content = "Generate";
-                        this.btnSolve.IsEnabled = false;
+                        BtnGenerate.Content = "Generate";
+                        BtnSolve.IsEnabled = false;
                         blank.ColumnDefinitions.Clear();
                         blank.RowDefinitions.Clear();
                         break;
@@ -136,7 +145,7 @@ namespace MajorWork
             _mainWindow.Solve();
         }
 
-        private void RunTut()
+        private void RunTut() //Opens the tutorial the first time the application runs on the system
         {
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             if (config.AppSettings.Settings["Tutorial"].Value == "True")

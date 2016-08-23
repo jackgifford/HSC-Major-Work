@@ -1,26 +1,21 @@
-﻿using System.ComponentModel;
-using MajorWork.Logic.Services;
-using MajorWork.Logic.Models;
-using MajorWork.Logic.Helpers;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
-using System;
-using System.Configuration;
-
+using MajorWork.Logic.Helpers;
+using MajorWork.Logic.Models;
+using MajorWork.Logic.Services;
 
 namespace MajorWork.ViewModels
 {
     public class MainWindowViewModel
     {
-        private Maze _maze;
-        private MazeGenerationService _genMaze;
-        private Draw _drawLibrary;
-        private Mazepoints _position;
-        private Mazepoints _finalCoords;
-        private MazePlayService _play;
-
-
         public delegate void ProgressUpdate(int value);
+
+        private Draw _drawLibrary;
+        private Mazepoints _finalCoords;
+        private MazeGenerationService _genMaze;
+        private Maze _maze;
+        private MazePlayService _play;
+        private Mazepoints _position;
         public event ProgressUpdate OnProgressUpdate;
 
         public void Generate(Grid blank, int userLength)
@@ -44,35 +39,33 @@ namespace MajorWork.ViewModels
 
             FindExitPoint();
 
-            var position = new Mazepoints(0, 0, false);
+            var position = new Mazepoints(0, 0, false, true);
             _position = position;
-
         }
 
         public void FindExitPoint()
         {
-            bool flag = true;
+            var flag = true;
             while (flag)
             {
-                int testX = MathRandom.GetRandomNumber(0, _maze.Length);
-                int testY = MathRandom.GetRandomNumber(0, _maze.Length);
+                var testX = MathRandom.GetRandomNumber(0, _maze.Length);
+                var testY = MathRandom.GetRandomNumber(0, _maze.Length);
 
-                if (_maze.MazeGrid.Exists(x => x.X == testX && x.Y == testY && x.IsPath == true))
+                if (_maze.MazeGrid.Exists(x => x.X == testX && x.Y == testY && x.IsPath))
                 {
-                    _finalCoords = new Mazepoints(testX, testY, true);
+                    _finalCoords = new Mazepoints(testX, testY, true, false);
                     flag = false;
                 }
-
             }
         }
 
-        public void DrawGrid(Grid blank, int userLength)
+        public void DrawGrid(Grid blank, byte r, byte g, byte b)
         {
             var mazeGraphic = new Draw(_maze, blank, _finalCoords);
             _drawLibrary = mazeGraphic;
         }
 
-        public void Play(Grid blank, KeyEventArgs e)
+        public void Play(KeyEventArgs e)
         {
             switch (e.Key)
             {
@@ -97,16 +90,8 @@ namespace MajorWork.ViewModels
 
         public void Solve()
         {
-            try
-            {
-                var solver = new MazeSolveService(_maze.MazeGrid, _finalCoords);
-                _drawLibrary.DrawSolution(solver.Solution);
-            }
-            catch (System.Exception)
-            {
-                throw;
-            }
-
+            var solver = new MazeSolveService(_maze.MazeGrid, _finalCoords);
+            _drawLibrary.DrawSolution(solver.Solution);
         }
 
         public void Clear()
@@ -115,7 +100,5 @@ namespace MajorWork.ViewModels
             _genMaze = null;
             _position = null;
         }
-
-      
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using MajorWork.Logic.Models;
 using MajorWork.Logic.Helpers;
-using System.ComponentModel;
 
 namespace MajorWork.Logic.Services
 {
@@ -37,7 +36,7 @@ namespace MajorWork.Logic.Services
             {
                 for (int k = 0; k < _mazeGrid.Length; k++)
                 {
-                    _mazeGrid.MazeGrid.Add(new Mazepoints(j, k, false));
+                    _mazeGrid.MazeGrid.Add(new Mazepoints(j, k, false, false));
                 }
             }
         }

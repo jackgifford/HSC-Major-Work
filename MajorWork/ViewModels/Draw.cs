@@ -23,6 +23,10 @@ namespace MajorWork.ViewModels
             ReadyPlayer();
         }
 
+        public Draw()
+        {
+            //Do Nothing
+        }
         private void DrawMaze()
         {
             foreach (var item in _maze.MazeGrid)
@@ -36,7 +40,7 @@ namespace MajorWork.ViewModels
 
         private void ReadyPlayer()
         {
-            Mazepoints startCoord = new Mazepoints(0, 0, false);
+            Mazepoints startCoord = new Mazepoints(0, 0, false, true);
             UIElement startRect = DrawRect(76, 175, 80);
             AddChildToGrid(startRect, startCoord);
 
@@ -49,7 +53,7 @@ namespace MajorWork.ViewModels
         {
             foreach (var position in solution)
             {
-                var tempMazePoint = new Mazepoints(position.X, position.Y, true);
+                var tempMazePoint = new Mazepoints(position.X, position.Y, true, false);
                 GenerateRectangle2(tempMazePoint);
             }
 
@@ -57,8 +61,17 @@ namespace MajorWork.ViewModels
 
         public void DrawPath(Mazepoints s)
         {
-            var myPath = DrawRect(76, 175, 80);
-            AddChildToGrid(myPath, s);
+            if (s.IsSolution)
+            {
+                var myPath = DrawRect(76, 175, 80);
+                AddChildToGrid(myPath, s);
+            }
+
+            else
+            {
+                RemovePath(s);
+            }
+
         }
 
         public void RemovePath(Mazepoints s)

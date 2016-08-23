@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MajorWork.Logic.Models;
 
+
 namespace MajorWork.Logic.Services
 {
     public class MazePlayService
@@ -14,10 +15,13 @@ namespace MajorWork.Logic.Services
         public MazePlayService(Maze maze)
         {
             _maze = maze;
+            
+
             var mazePath = new List<Mazepoints>();
 
+
             _pathSolution = mazePath;
-            _pathSolution.Add(new Mazepoints(0, 0, true)); //Add starting coords
+            _pathSolution.Add(new Mazepoints(0, 0, true, true)); //Add starting coords
         }
 
         public bool Gauntlet(Mazepoints postion, MoveList move)
@@ -28,10 +32,12 @@ namespace MajorWork.Logic.Services
                 if (item.X == _currentPoint.X && item.Y == _currentPoint.Y)
                 {
                     RemovePath();
+                    _currentPoint.IsSolution = false;
+                    return true;
                 }
             }
-
-            _pathSolution.Add(new Mazepoints(_currentPoint.X, _currentPoint.Y, true)); 
+            _currentPoint.IsSolution = true;
+            _pathSolution.Add(new Mazepoints(_currentPoint.X, _currentPoint.Y, true, true)); 
             return true;
         }
 
@@ -74,12 +80,12 @@ namespace MajorWork.Logic.Services
 
         private void RemovePath()
         {
-            _pathSolution.RemoveAt(_pathSolution.Count - 1);
-            //Remove positon from list
-            //Draw new position
+            _pathSolution.RemoveAt(_pathSolution.Count - 1); //Remove positon from list
+            _currentPoint = _pathSolution[_pathSolution.Count - 1]; //Update current positon to the previous state
+            _currentPoint.IsSolution = false;
+
             //Return false
-            
-            throw new NotImplementedException();
+
         }
 
         private bool MoveValidation()
