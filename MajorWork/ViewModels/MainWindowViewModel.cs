@@ -46,10 +46,12 @@ namespace MajorWork.ViewModels
         public void FindExitPoint()
         {
             var flag = true;
+
+            var findMaze = (_maze.Length) - (_maze.Length/4);
             while (flag)
             {
-                var testX = MathRandom.GetRandomNumber(0, _maze.Length);
-                var testY = MathRandom.GetRandomNumber(0, _maze.Length);
+                var testX = MathRandom.GetRandomNumber(findMaze, (_maze.Length -1));
+                var testY = MathRandom.GetRandomNumber(findMaze, (_maze.Length - 1));
 
                 if (_maze.MazeGrid.Exists(x => x.X == testX && x.Y == testY && x.IsPath))
                 {
@@ -65,7 +67,7 @@ namespace MajorWork.ViewModels
             _drawLibrary = mazeGraphic;
         }
 
-        public void Play(KeyEventArgs e)
+        public bool Play(KeyEventArgs e)
         {
             switch (e.Key)
             {
@@ -86,6 +88,13 @@ namespace MajorWork.ViewModels
                         _drawLibrary.DrawPath(_position);
                     break;
             }
+
+            if (_position.X == _finalCoords.X & _position.Y == _finalCoords.Y)
+                return true; //Game won
+
+            
+
+            return false;
         }
 
         public void Solve()

@@ -62,6 +62,7 @@ namespace MajorWork
             LoadingBar.Visibility = Visibility.Collapsed;
             LoadingScreen.Visibility = Visibility.Collapsed;
             BtnGenerate.Content = "Clear";
+            BtnGenerate.IsEnabled = true;
             //Update UI once worker completed work
         }
 
@@ -71,7 +72,11 @@ namespace MajorWork
             if (e.Key == Key.Up | e.Key == Key.Left | e.Key == Key.Right | e.Key == Key.Down)
             {
                 e.Handled = true;
-                _mainWindow.Play(e);
+                if (_mainWindow.Play(e))
+                {
+                    var message = MessageBox.Show("Game won!");
+                }
+
             }
         }
 
@@ -86,13 +91,14 @@ namespace MajorWork
                         LoadingBar.Visibility = Visibility.Visible;
                         LoadingScreen.Visibility = Visibility.Visible;
                         BtnSolve.IsEnabled = true;
+                        BtnGenerate.IsEnabled = false;
                         _red = (byte) SliderRed.Value;
                         _blue = (byte) SliderBlue.Value;
                         _green = (byte) SliderGreen.Value;
 
                         CallBackGroundWorker();
                         GenerateGrid();
-
+                        
                         break;
 
                     case "Clear":
