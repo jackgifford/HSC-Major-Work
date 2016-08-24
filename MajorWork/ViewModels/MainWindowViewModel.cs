@@ -18,24 +18,21 @@ namespace MajorWork.ViewModels
         private Mazepoints _position;
         public event ProgressUpdate OnProgressUpdate;
 
-        public void Generate(Grid blank, int userLength)
+        public void Generate(int userLength)
         {
             var maze = new Maze();
             _maze = maze;
-            if (OnProgressUpdate != null) //Can still be called without subscription to an event
-                OnProgressUpdate(20);
+            OnProgressUpdate?.Invoke(20);
 
             var genMaze = new MazeGenerationService(userLength, userLength, _maze);
             _genMaze = genMaze;
 
-            if (OnProgressUpdate != null)
-                OnProgressUpdate(70);
+            OnProgressUpdate?.Invoke(70); //Uses null propagation
 
             var play = new MazePlayService(_maze);
             _play = play;
 
-            if (OnProgressUpdate != null)
-                OnProgressUpdate(10);
+            OnProgressUpdate?.Invoke(10);
 
             CreateExitPoint();
 

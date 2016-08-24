@@ -44,14 +44,14 @@ namespace MajorWork
 
         private void _worker_DoWork(object sender, DoWorkEventArgs e) //Runs algorithms on a separate thread to keep the UI thread idle, and the application responsive
         {
-            _mainWindow.Generate(blank, _userLength);
+            _mainWindow.Generate(_userLength);
         }
 
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            _mainWindow.DrawGrid(blank); //Draw the maze once generated
+            _mainWindow.DrawGrid(MazeGrid); //Draw the maze once generated
 
-            blank.Visibility = Visibility.Visible; //Updates UI once the worker has completed its work.
+            MazeGrid.Visibility = Visibility.Visible; //Updates UI once the worker has completed its work.
             LoadingBar.Visibility = Visibility.Collapsed;
             LoadingScreen.Visibility = Visibility.Collapsed;
             BtnGenerate.Content = "Clear";
@@ -116,7 +116,7 @@ namespace MajorWork
                 e.Handled = true;
                 if (_mainWindow.Play(e))
                 {
-                    var message = MessageBox.Show("Game won!");
+                    MessageBox.Show("Game won!");
                 }
             }
         }
@@ -136,26 +136,26 @@ namespace MajorWork
         private void Clear() //Resets the UI to its initial state
         {
             _mainWindow.Clear();
-            blank.Children.Clear();
-            blank.Visibility = Visibility.Hidden;
+            MazeGrid.Children.Clear();
+            MazeGrid.Visibility = Visibility.Hidden;
             BtnGenerate.Content = "Generate";
             BtnSolve.IsEnabled = false;
-            blank.ColumnDefinitions.Clear();
-            blank.RowDefinitions.Clear();
+            MazeGrid.ColumnDefinitions.Clear();
+            MazeGrid.RowDefinitions.Clear();
         }
 
         private void GenerateGrid()
         {
             //Enable for debugging
-            blank.ShowGridLines = false;
+            MazeGrid.ShowGridLines = false;
 
             //Column Definitions
             for (int i = 0; i < _userLength; i++) 
-                blank.ColumnDefinitions.Add(new ColumnDefinition());
+                MazeGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
             //Row Definitons
             for (int i = 0; i < _userLength; i++)
-                blank.RowDefinitions.Add(new RowDefinition());
+                MazeGrid.RowDefinitions.Add(new RowDefinition());
         }
 
         #endregion

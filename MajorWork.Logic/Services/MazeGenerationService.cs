@@ -130,7 +130,7 @@ namespace MajorWork.Logic.Services
                 }
                 if (statement == false)
                 {
-                    var stackLength = _mazeGrid.MazeStack.Count() - 1;
+                    var stackLength = _mazeGrid.MazeStack.Count - 1;
 
                     x = _mazeGrid.MazeStack[stackLength].X;
                     y = _mazeGrid.MazeStack[stackLength].Y;

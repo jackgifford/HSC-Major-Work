@@ -96,21 +96,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="HelpControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="HelpControl.Designer.cs">
-      <DependentUpon>HelpControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="HelpWindow.xaml.cs">
-      <DependentUpon>HelpWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\Draw.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Page Include="HelpWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

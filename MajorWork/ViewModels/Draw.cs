@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Shapes;
 using MajorWork.Logic.Models;
 using System.Windows.Media;

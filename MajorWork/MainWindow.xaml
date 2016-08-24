@@ -18,7 +18,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" Margin="40" Width="Auto" Height="Auto" x:FieldModifier="public" x:Name="blank" Visibility="Hidden" Background="#2196F3">
+                <Grid Grid.Column="0" Margin="40" Width="Auto" Height="Auto" x:FieldModifier="protected"
+                      x:Name="MazeGrid" Visibility="Hidden" Background="#2196F3">
 
 
                 </Grid>
@@ -35,21 +36,9 @@
                     <Label Content="Maze Loading" FontWeight="Bold" FontSize="14" x:Name="LoadingScreen" Visibility="Collapsed" />
                     <ProgressBar Minimum="0" Maximum="100" Value="0" Width="Auto" x:Name="LoadingBar" Margin="20,0" Visibility="Collapsed"/>
                     
-                    <Label Content="Colour" FontWeight="Bold" FontSize="14"/>
+                 
                     <StackPanel Margin="0,0,0,20">
-                        <WrapPanel>
-                            <Label Content="Red:" Width="45"/>
-                            <Slider x:Name="SliderRed" Maximum="255" Width="100"/>
-
-                        </WrapPanel>
-                        <WrapPanel>
-                            <Label Content="Green:" Width="45"/>
-                            <Slider x:Name="SliderGreen" Maximum="255" Width="100"/>
-                        </WrapPanel>
-                        <WrapPanel>
-                            <Label Content="Blue:" Width="45"/>
-                            <Slider x:Name="SliderBlue" Maximum="255" Width="100" />
-                        </WrapPanel>
+                        
 
                     </StackPanel>
                     <WrapPanel HorizontalAlignment="Center" >
