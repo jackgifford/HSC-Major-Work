@@ -94,7 +94,6 @@
     <Compile Include="Models\AStar.cs" />
     <Compile Include="Models\Maze.cs" />
     <Compile Include="Models\Mazepoints.cs" />
-    <Compile Include="Models\MoveList.cs" />
     <Compile Include="Models\PlayerMoves.cs" />
     <Compile Include="Models\Stack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
