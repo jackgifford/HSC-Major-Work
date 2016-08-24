@@ -8,6 +8,7 @@ namespace MajorWork.Logic.Models
         public int Y { get; set; }
         public bool IsPath { get; set; }
         public bool IsSolution { get; set; }
+        public Mazepoints Parent { get; set; }
 
         public Mazepoints(int userX, int userY, bool userWall, bool userSolution)
         {

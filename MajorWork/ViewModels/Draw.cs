@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Shapes;
 using MajorWork.Logic.Models;
 using System.Windows.Media;
@@ -7,11 +8,11 @@ using System.Collections.Generic;
 
 namespace MajorWork.ViewModels
 {
-    class Draw
+    internal class Draw
     {
         private readonly Maze _maze;
         private readonly Grid _grid;
-        private Mazepoints _finalCoords;
+        private readonly Mazepoints _finalCoords;
 
         public Draw(Maze mazeGrid, Grid blank, Mazepoints finalCoords)
         {
@@ -23,10 +24,6 @@ namespace MajorWork.ViewModels
             ReadyPlayer();
         }
 
-        public Draw()
-        {
-            //Do Nothing
-        }
         private void DrawMaze()
         {
             foreach (var item in _maze.MazeGrid)
@@ -40,16 +37,15 @@ namespace MajorWork.ViewModels
 
         private void ReadyPlayer()
         {
-            Mazepoints startCoord = new Mazepoints(0, 0, false, true);
+            var startCoord = new Mazepoints(0, 0, false, true);
             UIElement startRect = DrawRect(76, 175, 80);
             AddChildToGrid(startRect, startCoord);
 
-            //Mazepoints finalCoord = new Mazepoints(8, 8, false);
             UIElement finalRect = DrawRect(244, 67, 54);
             AddChildToGrid(finalRect, _finalCoords);
         }
 
-        public void DrawSolution(List<AStar> solution)
+        public void DrawSolution(IEnumerable<AStar> solution)
         {
             foreach (var position in solution)
             {
@@ -67,14 +63,14 @@ namespace MajorWork.ViewModels
                 AddChildToGrid(myPath, s);
             }
 
-            else
+            else 
             {
-                RemovePath(s);
+                RemovePath(s.Parent);
             }
 
         }
 
-        public void RemovePath(Mazepoints s)
+        private void RemovePath(Mazepoints s)
         {
             var pathToRemove = DrawRect(255, 255, 255);
             AddChildToGrid(pathToRemove, s);
@@ -94,11 +90,13 @@ namespace MajorWork.ViewModels
 
         private Rectangle DrawRect(byte r, byte g, byte b)
         {
-            Rectangle myRect = new Rectangle();
-            myRect.Width = 50;
-            myRect.Height = 50;
-            SolidColorBrush colourBrush = new SolidColorBrush(Color.FromRgb(r, g, b));
+            var myRect = new Rectangle
+            {
+                Width = 50,
+                Height = 50
+            };
 
+            var colourBrush = new SolidColorBrush(Color.FromRgb(r, g, b));
             myRect.Fill = colourBrush;
             return myRect;
         }
@@ -110,11 +108,5 @@ namespace MajorWork.ViewModels
             Grid.SetColumn(val, s.X);
         }
 
-        private void AddChildToGrid2(UIElement val, Mazepoints s)
-        {
-            _grid.Children.Add(val);
-            Grid.SetRow(val, s.Y);
-            Grid.SetColumn(val, s.X);
-        }
     }
 }

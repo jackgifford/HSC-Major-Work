@@ -11,6 +11,7 @@ namespace MajorWork.Logic.Services
         private Mazepoints _currentPoint;
         private readonly Maze _maze;
         private readonly List<Mazepoints> _pathSolution;
+        private Mazepoints _previousPoint;
 
         public MazePlayService(Maze maze)
         {
@@ -24,15 +25,17 @@ namespace MajorWork.Logic.Services
             _pathSolution.Add(new Mazepoints(0, 0, true, true)); //Add starting coords
         }
 
-        public bool Gauntlet(Mazepoints postion, MoveList move)
+        public bool Gauntlet(ref Mazepoints postion, MoveList move)
         {
             if (!MoveSelection(postion, move)) return false;
+
             foreach (var item in _pathSolution) //Iterate through list if mazepoint is there 
             {
                 if (item.X == _currentPoint.X && item.Y == _currentPoint.Y)
                 {
                     RemovePath();
-                    _currentPoint.IsSolution = false;
+                    postion.IsSolution = false;
+                    postion.Parent = _previousPoint;
                     return true;
                 }
             }
@@ -80,6 +83,7 @@ namespace MajorWork.Logic.Services
 
         private void RemovePath()
         {
+            _previousPoint = _pathSolution[_pathSolution.Count - 1];
             _pathSolution.RemoveAt(_pathSolution.Count - 1); //Remove positon from list
             _currentPoint = _pathSolution[_pathSolution.Count - 1]; //Update current positon to the previous state
             _currentPoint.IsSolution = false;

@@ -37,13 +37,13 @@ namespace MajorWork.ViewModels
             if (OnProgressUpdate != null)
                 OnProgressUpdate(10);
 
-            FindExitPoint();
+            CreateExitPoint();
 
             var position = new Mazepoints(0, 0, false, true);
             _position = position;
         }
 
-        public void FindExitPoint()
+        private void CreateExitPoint()
         {
             var flag = true;
 
@@ -61,7 +61,7 @@ namespace MajorWork.ViewModels
             }
         }
 
-        public void DrawGrid(Grid blank, byte r, byte g, byte b)
+        public void DrawGrid(Grid blank)
         {
             var mazeGraphic = new Draw(_maze, blank, _finalCoords);
             _drawLibrary = mazeGraphic;
@@ -72,19 +72,19 @@ namespace MajorWork.ViewModels
             switch (e.Key)
             {
                 case Key.Up:
-                    if (_play.Gauntlet(_position, MoveList.Up))
+                    if (_play.Gauntlet(ref _position, MoveList.Up))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Down:
-                    if (_play.Gauntlet(_position, MoveList.Down))
+                    if (_play.Gauntlet(ref _position, MoveList.Down))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Left:
-                    if (_play.Gauntlet(_position, MoveList.Left))
+                    if (_play.Gauntlet(ref _position, MoveList.Left))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Right:
-                    if (_play.Gauntlet(_position, MoveList.Right))
+                    if (_play.Gauntlet(ref _position, MoveList.Right))
                         _drawLibrary.DrawPath(_position);
                     break;
             }
@@ -92,10 +92,9 @@ namespace MajorWork.ViewModels
             if (_position.X == _finalCoords.X & _position.Y == _finalCoords.Y)
                 return true; //Game won
 
-            
-
             return false;
         }
+
 
         public void Solve()
         {

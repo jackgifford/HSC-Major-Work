@@ -4,8 +4,6 @@ using System.Configuration;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
-
 using MajorWork.ViewModels;
 
 namespace MajorWork
@@ -18,9 +16,6 @@ namespace MajorWork
         private readonly MainWindowViewModel _mainWindow;
         private int _userLength;
         private readonly BackgroundWorker _worker;
-        private byte _red;
-        private byte _green;
-        private byte _blue;
 
         public MainWindow()
         {
@@ -33,82 +28,58 @@ namespace MajorWork
             _worker.DoWork += _worker_DoWork;
             _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
             _worker.WorkerReportsProgress = true;
-            _mainWindow.OnProgressUpdate += _mainWindow_OnProgressUpdate; //Invoke _mainWindow_OnProgressUpdate whenever the OnProgressUpdate event is called in _mainWindow
+            _mainWindow.OnProgressUpdate += _mainWindow_OnProgressUpdate;
+                //Invoke _mainWindow_OnProgressUpdate whenever the OnProgressUpdate event is called in _mainWindow
             PreviewKeyDown += MainWindow_PreviewKeyDown;
 
             RunTut();
         }
 
-        void _mainWindow_OnProgressUpdate(int value) //Return to ui thread
-        {
-            Dispatcher.Invoke(delegate
-            {
-                LoadingBar.Value += value;
-            });
+        #region Background Worker
 
+        private void CallBackGroundWorker()
+        {
+            _worker.RunWorkerAsync();
         }
 
-        private void _worker_DoWork(object sender, DoWorkEventArgs e)
+        private void _worker_DoWork(object sender, DoWorkEventArgs e) //Runs algorithms on a separate thread to keep the UI thread idle, and the application responsive
         {
             _mainWindow.Generate(blank, _userLength);
-            //Run all background tasks here
         }
 
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            _mainWindow.DrawGrid(blank, _red, _green, _blue);
+            _mainWindow.DrawGrid(blank); //Draw the maze once generated
 
-            blank.Visibility = Visibility.Visible;
+            blank.Visibility = Visibility.Visible; //Updates UI once the worker has completed its work.
             LoadingBar.Visibility = Visibility.Collapsed;
             LoadingScreen.Visibility = Visibility.Collapsed;
             BtnGenerate.Content = "Clear";
             BtnGenerate.IsEnabled = true;
-            //Update UI once worker completed work
         }
 
-
-        void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e)
+        void _mainWindow_OnProgressUpdate(int value) //Return to ui thread and increment the loading bar to indivate progress has been made
         {
-            if (e.Key == Key.Up | e.Key == Key.Left | e.Key == Key.Right | e.Key == Key.Down)
-            {
-                e.Handled = true;
-                if (_mainWindow.Play(e))
-                {
-                    var message = MessageBox.Show("Game won!");
-                }
-
-            }
+            Dispatcher.Invoke(delegate { LoadingBar.Value += value; });
         }
+
+        #endregion
+
+        #region Click Methods
 
         private void btnGenerate_Click(object sender, RoutedEventArgs e)
         {
             try
             {
                 _userLength = Convert.ToInt32(LengthTxt.Text);
-                switch ((string)BtnGenerate.Content)
+                switch ((string) BtnGenerate.Content)
                 {
                     case "Generate":
-                        LoadingBar.Visibility = Visibility.Visible;
-                        LoadingScreen.Visibility = Visibility.Visible;
-                        BtnSolve.IsEnabled = true;
-                        BtnGenerate.IsEnabled = false;
-                        _red = (byte) SliderRed.Value;
-                        _blue = (byte) SliderBlue.Value;
-                        _green = (byte) SliderGreen.Value;
-
-                        CallBackGroundWorker();
-                        GenerateGrid();
-                        
+                        Generate();
                         break;
 
                     case "Clear":
-                        _mainWindow.Clear();
-                        blank.Children.Clear();
-                        blank.Visibility = Visibility.Hidden;
-                        BtnGenerate.Content = "Generate";
-                        BtnSolve.IsEnabled = false;
-                        blank.ColumnDefinitions.Clear();
-                        blank.RowDefinitions.Clear();
+                        Clear();
                         break;
                 }
             }
@@ -119,27 +90,8 @@ namespace MajorWork
             }
         }
 
-        private void CallBackGroundWorker()
-        {
-            _worker.RunWorkerAsync();
-        }
 
-        private void GenerateGrid()
-        {
-            //Enable for debugging
-            blank.ShowGridLines = false;
-
-            //Column Definitions
-            for (int i = 0; i < _userLength; i++) //Change to user width
-                blank.ColumnDefinitions.Add(new ColumnDefinition());
-
-
-            //Row Definitons
-            for (int i = 0; i < _userLength; i++)
-                blank.RowDefinitions.Add(new RowDefinition());
-        }
-
-        private void AboutItem_Click(object sender, RoutedEventArgs e)
+        private void AboutItem_Click(object sender, RoutedEventArgs e) //Opens a support page in the browser that shows documentation, tutorials, source code and other information relevant to the project
         {
             var value = MessageBox.Show("Open your web browser?", "Maze Generator", MessageBoxButton.YesNo);
             if (value == MessageBoxResult.Yes)
@@ -151,7 +103,64 @@ namespace MajorWork
             _mainWindow.Solve();
         }
 
-        private void RunTut() //Opens the tutorial the first time the application runs on the system
+        private void HelpButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        #endregion
+
+        private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e) //Handles arrow key press
+        {
+            if (e.Key == Key.Up | e.Key == Key.Left | e.Key == Key.Right | e.Key == Key.Down)
+            {
+                e.Handled = true;
+                if (_mainWindow.Play(e))
+                {
+                    var message = MessageBox.Show("Game won!");
+                }
+            }
+        }
+
+        #region Updates to MainWindow
+
+        private void Generate() //UI changes and launches the background worker
+        {
+            LoadingBar.Visibility = Visibility.Visible;
+            LoadingScreen.Visibility = Visibility.Visible;
+            BtnSolve.IsEnabled = true;
+            BtnGenerate.IsEnabled = false;
+            CallBackGroundWorker();
+            GenerateGrid();
+        }
+
+        private void Clear() //Resets the UI to its initial state
+        {
+            _mainWindow.Clear();
+            blank.Children.Clear();
+            blank.Visibility = Visibility.Hidden;
+            BtnGenerate.Content = "Generate";
+            BtnSolve.IsEnabled = false;
+            blank.ColumnDefinitions.Clear();
+            blank.RowDefinitions.Clear();
+        }
+
+        private void GenerateGrid()
+        {
+            //Enable for debugging
+            blank.ShowGridLines = false;
+
+            //Column Definitions
+            for (int i = 0; i < _userLength; i++) 
+                blank.ColumnDefinitions.Add(new ColumnDefinition());
+
+            //Row Definitons
+            for (int i = 0; i < _userLength; i++)
+                blank.RowDefinitions.Add(new RowDefinition());
+        }
+
+        #endregion
+
+        private void RunTut() //Opens the tutorial the first time the application runs on the system, user can then reacess the tutorial at any time by selecting the help button
         {
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             if (config.AppSettings.Settings["Tutorial"].Value == "True")
@@ -168,8 +177,6 @@ namespace MajorWork
                 config.AppSettings.Settings["Tutorial"].Value = "False";
                 config.Save(ConfigurationSaveMode.Modified);
             }
-
-
         }
     }
 }

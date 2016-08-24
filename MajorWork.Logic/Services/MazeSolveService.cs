@@ -41,10 +41,6 @@ namespace MajorWork.Logic.Services
             }
 
 
-
-            foreach (var child in _entireMaze) //Preprocess every heursitic in the maze but only process those that aren't walls
-                child.H = HeuristicCalculator(child.X, child.Y);
-
             _length = _entireMaze.Max(x => x.Y); //Length calculated by finding the largest Y coordinate in the list
 
             var currentPosition = GenerateSolution();
@@ -73,7 +69,7 @@ namespace MajorWork.Logic.Services
 
             _openSet.Add(start);
 
-            AStar finalPosition = new AStar();
+            var finalPosition = new AStar();
 
             while (_openSet.Count > 0)
             {

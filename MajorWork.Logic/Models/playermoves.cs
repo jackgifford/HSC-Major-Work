@@ -1,4 +1,8 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MajorWork.Logic.Models
 {
@@ -8,7 +12,7 @@ namespace MajorWork.Logic.Models
 
         public MoveList PlayerFields { get { return _playerFields; } set { _playerFields = PlayerFields; } }
 
-        
+
     }
 
     public enum MoveList

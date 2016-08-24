@@ -11,7 +11,7 @@
                     <MenuItem Header="_Print"/>
                     <MenuItem Header="_About" Click="AboutItem_Click" />
                 </MenuItem>
-                <MenuItem Header="_Help"/>
+                <MenuItem x:Name="HelpButton" Header="_Help" Click="HelpButton_Click"/>
             </Menu>
             <Grid Margin="0,0,0,-18" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
