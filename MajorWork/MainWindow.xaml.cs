@@ -15,27 +15,29 @@ namespace MajorWork
     {
         private readonly MainWindowViewModel _mainWindow;
         private int _userLength;
-        private readonly BackgroundWorker _worker;
+        private BackgroundWorker _worker;
 
         public MainWindow()
         {
             var mainWindow = new MainWindowViewModel();
             InitializeComponent();
             _mainWindow = mainWindow;
-
-            var backgroundWorker = new BackgroundWorker();
-            _worker = backgroundWorker;
-            _worker.DoWork += _worker_DoWork;
-            _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
-            _worker.WorkerReportsProgress = true;
-            _mainWindow.OnProgressUpdate += _mainWindow_OnProgressUpdate;
-                //Invoke _mainWindow_OnProgressUpdate whenever the OnProgressUpdate event is called in _mainWindow
             PreviewKeyDown += MainWindow_PreviewKeyDown;
-
+            SetupBackgroundWorker();
             RunTut();
         }
 
         #region Background Worker
+
+        private void SetupBackgroundWorker() //Invoke _mainWindow_OnProgressUpdate whenever the OnProgressUpdate event is called in _mainWindow
+        {
+            var backgroundWorker = new BackgroundWorker();
+            _mainWindow.OnProgressUpdate += _mainWindow_OnProgressUpdate;
+            _worker = backgroundWorker;
+            _worker.DoWork += _worker_DoWork;
+            _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
+            _worker.WorkerReportsProgress = true;
+        }
 
         private void CallBackGroundWorker()
         {
