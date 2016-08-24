@@ -1,9 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Configuration;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using MajorWork.ViewModels;
 
 namespace MajorWork
@@ -16,6 +20,7 @@ namespace MajorWork
         private readonly MainWindowViewModel _mainWindow;
         private int _userLength;
         private BackgroundWorker _worker;
+        private BackgroundWorker _solveWorker;
 
         public MainWindow()
         {
@@ -35,19 +40,24 @@ namespace MajorWork
             _mainWindow.OnProgressUpdate += _mainWindow_OnProgressUpdate;
             _worker = backgroundWorker;
             _worker.DoWork += _worker_DoWork;
+
             _worker.RunWorkerCompleted += _worker_RunWorkerCompleted;
             _worker.WorkerReportsProgress = true;
         }
+
+  
 
         private void CallBackGroundWorker()
         {
             _worker.RunWorkerAsync();
         }
 
+
         private void _worker_DoWork(object sender, DoWorkEventArgs e) //Runs algorithms on a separate thread to keep the UI thread idle, and the application responsive
         {
             _mainWindow.Generate(_userLength);
         }
+
 
         private void _worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -59,6 +69,7 @@ namespace MajorWork
             BtnGenerate.Content = "Clear";
             BtnGenerate.IsEnabled = true;
         }
+
 
         void _mainWindow_OnProgressUpdate(int value) //Return to ui thread and increment the loading bar to indivate progress has been made
         {
@@ -97,12 +108,23 @@ namespace MajorWork
         {
             var value = MessageBox.Show("Open your web browser?", "Maze Generator", MessageBoxButton.YesNo);
             if (value == MessageBoxResult.Yes)
-                System.Diagnostics.Process.Start("http://shmacktus.github.io/HSC-Major-Work");
+                Process.Start("http://shmacktus.github.io/HSC-Major-Work");
         }
 
-        private void btnSolve_Click(object sender, RoutedEventArgs e)
+        private void btnSolve_Click(object sender, RoutedEventArgs e) //Process is simple enough to not need a background worker, just create a new thread to build the solution
         {
-            _mainWindow.Solve();
+            BtnSolve.IsEnabled = false;
+            var t = new Thread(() =>
+            {
+                _mainWindow.Solve(); //Call _mainWindow.Solve() from a different thread
+
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+                {
+                    _mainWindow.DrawSolution(); //Once completed draw the solution using the UI thread. 
+                }));
+            });
+
+            t.Start();
         }
 
         private void HelpButton_Click(object sender, RoutedEventArgs e)
@@ -132,7 +154,7 @@ namespace MajorWork
             BtnSolve.IsEnabled = true;
             BtnGenerate.IsEnabled = false;
             CallBackGroundWorker();
-            GenerateGrid();
+            GenerateGrid();   
         }
 
         private void Clear() //Resets the UI to its initial state
@@ -174,7 +196,7 @@ namespace MajorWork
                         "Maze Generator: Tutorial", MessageBoxButton.YesNo);
 
                 if (value == MessageBoxResult.Yes)
-                    System.Diagnostics.Process.Start("http://shmacktus.github.io/HSC-Major-Work");
+                    Process.Start("http://shmacktus.github.io/HSC-Major-Work");
 
                 config.AppSettings.Settings["Tutorial"].Value = "False";
                 config.Save(ConfigurationSaveMode.Modified);

@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using System.Windows.Input;
 using MajorWork.Logic.Helpers;
 using MajorWork.Logic.Models;
@@ -13,9 +14,11 @@ namespace MajorWork.ViewModels
         private Draw _drawLibrary;
         private Mazepoints _finalCoords;
         private MazeGenerationService _genMaze;
+        private MazeSolveService _solution;
         private Maze _maze;
         private MazePlayService _play;
         private Mazepoints _position;
+
         public event ProgressUpdate OnProgressUpdate;
 
         public void Generate(int userLength)
@@ -96,8 +99,15 @@ namespace MajorWork.ViewModels
         public void Solve()
         {
             var solver = new MazeSolveService(_maze.MazeGrid, _finalCoords);
-            _drawLibrary.DrawSolution(solver.Solution);
+            _solution = solver;
+            
         }
+
+        public void DrawSolution()
+        {
+            _drawLibrary.DrawSolution(_solution.Solution);
+        }
+
 
         public void Clear()
         {
