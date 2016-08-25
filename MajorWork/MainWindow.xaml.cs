@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,13 +13,16 @@ namespace MajorWork
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
+    /// This class is concerned with updating the User Interface, and calling methods from the MainWindowViewModel Class
+    /// 
+    /// The background worker is used to run the Generate() Function on a separate thread and makes several calls back to notify the user that the algorithm is building the maze succesfully
+    /// 
     /// </summary>
     public partial class MainWindow
     {
         private readonly MainWindowViewModel _mainWindow;
         private int _userLength;
         private BackgroundWorker _worker;
-        private BackgroundWorker _solveWorker;
 
         public MainWindow()
         {
@@ -45,7 +47,7 @@ namespace MajorWork
             _worker.WorkerReportsProgress = true;
         }
 
-  
+
 
         private void CallBackGroundWorker()
         {
@@ -68,6 +70,7 @@ namespace MajorWork
             LoadingScreen.Visibility = Visibility.Collapsed;
             BtnGenerate.Content = "Clear";
             BtnGenerate.IsEnabled = true;
+            BtnSolve.IsEnabled = true;
         }
 
 
@@ -85,16 +88,38 @@ namespace MajorWork
             try
             {
                 _userLength = Convert.ToInt32(LengthTxt.Text);
-                switch ((string) BtnGenerate.Content)
-                {
-                    case "Generate":
-                        Generate();
-                        break;
+                var flag = false;
 
-                    case "Clear":
-                        Clear();
-                        break;
+                if (_userLength < 10) //Mazes less than 10 in length can sometimes crash
+                {
+                    MessageBox.Show("Please insert a number greater than or equal to 10");
+                    return;
                 }
+                
+                if (_userLength >= 170) //A maze over a size of 170 is going to take a while to generate
+                {
+                    var box =
+                        MessageBox.Show(
+                            "Mazes that are 170 or greater in length can take a long time to generate, do you wish to continue?",
+                            "Maze Generator: Tutorial", MessageBoxButton.YesNo);
+
+                    if (box == MessageBoxResult.Yes)
+                        flag = true;
+                }
+
+                if (flag | _userLength < 170)
+                {
+                    switch ((string)BtnGenerate.Content)
+                    {
+                        case "Generate":
+                            Generate();
+                            break;
+
+                        case "Clear":
+                            Clear();
+                            break;
+                    }
+                }      
             }
 
             catch (Exception)
@@ -129,18 +154,27 @@ namespace MajorWork
 
         private void HelpButton_Click(object sender, RoutedEventArgs e)
         {
+            if (helpDialog.Visibility == Visibility.Visible)
+                helpDialog.Visibility = Visibility.Collapsed;
+
+            else
+                helpDialog.Visibility = Visibility.Visible;
         }
 
         #endregion
 
         private void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e) //Handles arrow key press
         {
-            if (e.Key == Key.Up | e.Key == Key.Left | e.Key == Key.Right | e.Key == Key.Down)
+            if (BtnGenerate.Content == "Clear")
+                //Prevents the program from crashing if there is no maze currently generated
             {
-                e.Handled = true;
-                if (_mainWindow.Play(e))
+                if (e.Key == Key.Up | e.Key == Key.Left | e.Key == Key.Right | e.Key == Key.Down)
                 {
-                    MessageBox.Show("Game won!");
+                    e.Handled = true;
+                    if (_mainWindow.Play(e))
+                    {
+                        MessageBox.Show("Game won!");
+                    }
                 }
             }
         }
@@ -151,10 +185,9 @@ namespace MajorWork
         {
             LoadingBar.Visibility = Visibility.Visible;
             LoadingScreen.Visibility = Visibility.Visible;
-            BtnSolve.IsEnabled = true;
             BtnGenerate.IsEnabled = false;
             CallBackGroundWorker();
-            GenerateGrid();   
+            GenerateGrid();
         }
 
         private void Clear() //Resets the UI to its initial state
@@ -174,7 +207,7 @@ namespace MajorWork
             MazeGrid.ShowGridLines = false;
 
             //Column Definitions
-            for (int i = 0; i < _userLength; i++) 
+            for (int i = 0; i < _userLength; i++)
                 MazeGrid.ColumnDefinitions.Add(new ColumnDefinition());
 
             //Row Definitons
@@ -184,7 +217,7 @@ namespace MajorWork
 
         #endregion
 
-        private void RunTut() //Opens the tutorial the first time the application runs on the system, user can then reacess the tutorial at any time by selecting the help button
+        private static void RunTut() //Opens the tutorial the first time the application runs on the system, user can then reacess the tutorial at any time by selecting the help button
         {
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             if (config.AppSettings.Settings["Tutorial"].Value == "True")

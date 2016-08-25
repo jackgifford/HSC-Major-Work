@@ -16,7 +16,7 @@ namespace MajorWork.Logic.Services
         public MazePlayService(Maze maze)
         {
             _maze = maze;
-            
+
 
             var mazePath = new List<Mazepoints>();
 
@@ -25,17 +25,18 @@ namespace MajorWork.Logic.Services
             _pathSolution.Add(new Mazepoints(0, 0, true, true)); //Add starting coords
         }
 
-        public bool Gauntlet(ref Mazepoints postion, MoveList move)
+        public bool Gauntlet(Mazepoints position, MoveList move)
         {
-            if (!MoveSelection(postion, move)) return false;
+
+            if (!MoveSelection(position, move)) return false;
 
             foreach (var item in _pathSolution) //Iterate through list if mazepoint is there 
             {
                 if (item.X == _currentPoint.X && item.Y == _currentPoint.Y)
                 {
                     RemovePath();
-                    postion.IsSolution = false;
-                    postion.Parent = _previousPoint;
+                    position.IsSolution = false;
+                    position.Parent = _previousPoint;
                     return true;
                 }
             }

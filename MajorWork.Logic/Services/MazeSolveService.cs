@@ -6,13 +6,16 @@ using MoreLinq;
 
 namespace MajorWork.Logic.Services
 {
+    /// <summary>
+    /// This class finds the most efficient solution building a path from the start point, to the end point via A*
+    /// </summary>
     public class MazeSolveService
     {
         private readonly List<AStar> _openSet;
         private readonly List<AStar> _closedSet;
         private readonly List<AStar> _entireMaze;
         private readonly List<Mazepoints> _mazeCoords;
-        private readonly int _length; //Update with a real value
+        private readonly int _length;
         private readonly AStar _target;
 
         public readonly List<AStar> Solution;
@@ -28,8 +31,6 @@ namespace MajorWork.Logic.Services
                 X = finalCoords.X,
                 Y = finalCoords.Y
             };
-
-            //Fix these hardcoded values once AStar is properly implmented
 
 
             foreach (var child in mazeCoords) //Get all the nodes into a list that can be used by the AStar algorithm
@@ -108,9 +109,7 @@ namespace MajorWork.Logic.Services
                             }
                         }
                     }
-
                 }
-
             }
             //Need to handle if comes here without finding a final position - i.e. no path exists
             return finalPosition;
@@ -120,29 +119,27 @@ namespace MajorWork.Logic.Services
         {
             var list = new List<AStar>();
 
-            if (current.Y - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X) && (x.Y == current.Y - 1)).IsPath)
+            if (current.Y - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X) && (x.Y == current.Y - 1)).IsPath) //Up
                 list.Add(AddNeighbourData(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y - 1)), current));
 
-            if (current.Y + 1 <= _length && _mazeCoords.First(x => (x.X == current.X) && (x.Y == current.Y + 1)).IsPath)
+            if (current.Y + 1 <= _length && _mazeCoords.First(x => (x.X == current.X) && (x.Y == current.Y + 1)).IsPath) //Down
                 list.Add(AddNeighbourData(_entireMaze.First(x => (x.X == current.X) && (x.Y == current.Y + 1)), current));
 
 
-            if (current.X - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X - 1) && (x.Y == current.Y)).IsPath)
+            if (current.X - 1 >= 0 && _mazeCoords.First(x => (x.X == current.X - 1) && (x.Y == current.Y)).IsPath) //Left
                 list.Add(AddNeighbourData(_entireMaze.First(x => (x.X == current.X - 1) && (x.Y == current.Y)), current));
 
-            if (current.X + 1 <= _length && _mazeCoords.First(x => (x.X == current.X + 1) && (x.Y == current.Y)).IsPath)
+            if (current.X + 1 <= _length && _mazeCoords.First(x => (x.X == current.X + 1) && (x.Y == current.Y)).IsPath) //Right
                 list.Add(AddNeighbourData(_entireMaze.First(x => (x.X == current.X + 1) && (x.Y == current.Y)), current));
 
             return list;
         }
 
 
-        private AStar AddNeighbourData(AStar neighbour, AStar current) //Stack and heap memory
+        private AStar AddNeighbourData(AStar neighbour, AStar current) //Ensures the AStar class is copied and stored
         {
-            //Note to Jack. Need to be careful when copying classes as you don't make a copy you actually just copy the reference. So AStar B = AStar A means that any changes you make to B will also make the same change to A. 
-            //Read up and understand the difference between stack and heap memory - is important.
             AStar neighbourEntry = new AStar
-            { 
+            {
                 X = neighbour.X,
                 Y = neighbour.Y,
                 H = neighbour.H,
@@ -153,7 +150,7 @@ namespace MajorWork.Logic.Services
             return neighbourEntry;
         }
 
-        private static List<AStar> BuildSolution(AStar finalPos)
+        private static List<AStar> BuildSolution(AStar finalPos) //Iterates through from the final position to the start, when it returns null then the start position has been reached
         {
             var list = new List<AStar>();
 

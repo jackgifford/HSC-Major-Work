@@ -25,17 +25,26 @@ namespace MajorWork.ViewModels
         {
             var maze = new Maze();
             _maze = maze;
-            OnProgressUpdate?.Invoke(20);
+            if (OnProgressUpdate != null)
+            {
+                OnProgressUpdate.Invoke(20); //Updates the loading bar on the MainWindow
+            }
 
             var genMaze = new MazeGenerationService(userLength, userLength, _maze);
             _genMaze = genMaze;
 
-            OnProgressUpdate?.Invoke(70); //Uses null propagation
+            if (OnProgressUpdate != null)
+            {
+                OnProgressUpdate.Invoke(70); //Updates the loading bar on the MainWindow
+            } 
 
             var play = new MazePlayService(_maze);
             _play = play;
 
-            OnProgressUpdate?.Invoke(10);
+            if (OnProgressUpdate != null)
+            {
+                OnProgressUpdate.Invoke(10); //Updates the loading bar on the MainWindow
+            }
 
             CreateExitPoint();
 
@@ -43,7 +52,7 @@ namespace MajorWork.ViewModels
             _position = position;
         }
 
-        private void CreateExitPoint()
+        private void CreateExitPoint() //Creates a random end point to the maze in the bottom right quadrant of the maze
         {
             var flag = true;
 
@@ -72,19 +81,19 @@ namespace MajorWork.ViewModels
             switch (e.Key)
             {
                 case Key.Up:
-                    if (_play.Gauntlet(ref _position, MoveList.Up))
+                    if (_play.Gauntlet(_position, MoveList.Up))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Down:
-                    if (_play.Gauntlet(ref _position, MoveList.Down))
+                    if (_play.Gauntlet(_position, MoveList.Down))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Left:
-                    if (_play.Gauntlet(ref _position, MoveList.Left))
+                    if (_play.Gauntlet(_position, MoveList.Left))
                         _drawLibrary.DrawPath(_position);
                     break;
                 case Key.Right:
-                    if (_play.Gauntlet(ref _position, MoveList.Right))
+                    if (_play.Gauntlet(_position, MoveList.Right))
                         _drawLibrary.DrawPath(_position);
                     break;
             }
@@ -103,13 +112,13 @@ namespace MajorWork.ViewModels
             
         }
 
-        public void DrawSolution()
+        public void DrawSolution() //Takes the solution path and draws the solution over the grid
         {
             _drawLibrary.DrawSolution(_solution.Solution);
         }
 
 
-        public void Clear()
+        public void Clear() //Ensures that everything is cleared before a new maze is generated
         {
             _maze = null;
             _genMaze = null;

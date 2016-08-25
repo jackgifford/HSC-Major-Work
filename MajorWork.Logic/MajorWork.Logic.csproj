@@ -57,9 +57,7 @@
     <Compile Include="Services\MazePlayService.cs" />
     <Compile Include="Services\MazeSolveService.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
